@@ -28,37 +28,37 @@ def extract_tvseries(dom):
     - Runtime (only a number!)
     """
 
-    # make a list to store lists with info about each serie
-    list_tv_series = []
-
     # find the div(s) with serie information
     series = dom.findAll("div", {"class": "lister-item-content"})
     
+    # make a list to store lists with info about each serie in it
+    list_tv_series = []
+
     # Extract the needed info of each serie
     for serie in series:
 
         # list to store info of serie in
-        nr_serie = []
+        info_serie = []
 
         title = serie.h3.a.text
-        nr_serie.append(title)
+        info_serie.append(title)
 
         rating = serie.strong.text
-        nr_serie.append(rating)
+        info_serie.append(rating)
 
         genre = serie.p.find("span", {"class": "genre"}).string.strip()
-        nr_serie.append(genre)
+        info_serie.append(genre)
 
         actors = serie.select("p")[2].text.strip("Stars: \n").replace("\n", "")
-        nr_serie.append(actors)
+        info_serie.append(actors)
 
         runtime = serie.p.find("span", {"class": "runtime"}).string.strip(" min")
-        nr_serie.append(runtime)
+        info_serie.append(runtime)
 
         # store all lists in a list
-        list_tv_series.append(nr_serie)
+        list_tv_series.append(info_serie)
 
-    # return the list with list of the 50 best rated TV series
+    # return the list with info of the 50 best rated TV series
     return list_tv_series
 
 
