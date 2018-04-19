@@ -1,5 +1,6 @@
 /**
-* Marwa Ahmed studentnumber 10747141
+* Data Processing
+* Marwa Ahmed, student number 10747141
 *
 **/
 
@@ -10,29 +11,32 @@ var raw_data = document.getElementById("rawdata").value
 // split each row
 var rows = raw_data.split('\n', 365)
 
-// 
+// variables to store the dates and temperature separately 
 var date = []
 var temp = []
 var jsdates = [] 
 
-// split the date from the temp
+// split the date from the temperature
 for (i = 0; i < rows.length; i++){
 	var column = rows[i].split(',')
 	date.push(column[0])
 	
-	// '+' makes it a javascript number
+	// '+' makes the temp a javascript number
 	temp.push(+column[1])
 
-	// make sure that the  dates 
+	// turn dates into javascript dates 
 	var year = date[i].substring(0, 4)
 	var month = date[i].substring(4, 6)
 	var day = date[i].substring(6, 8)
-
 	var jsdate = new Date(year + '-' + month + '-' + day)
 	jsdates.push(jsdate)
 }
 
 
+/**
+* Function to transform the data to screen coordinates
+*
+**/
 function createTransform(domain, range) {
 	// domain is a two-element array of the data bounds [domain_min, domain_max]
 	// range is a two-element array of the screen bounds [range_min, range_max]
@@ -56,7 +60,13 @@ function createTransform(domain, range) {
 	}
 }
 
-// draw the graph 
+
+/** 
+* draw the graph
+*
+**/
+
+
 var canvas = document.getElementById('canvas')
 
 var ctx = canvas.getContext('2d')
@@ -100,46 +110,32 @@ for (i = 0; i < jsdates.length; i++)
 console.log(x_axis)
 
 
-// draw graph
-
+// 
 var height = 125
 var width = 250 
 var margin = 50
 
 
-// y
+// draw y-axis line
 ctx.beginPath();
 ctx.moveTo(margin, margin);
 ctx.lineWidth = 2;
 ctx.lineTo(margin, height);
 ctx.stroke();
 
-
-
-// text y as 
-// ctx.textAlign = "..."
-// ctx.fillText("temperature", 300, 300)
-
-// x
+// draw x-axis line
 ctx.beginPath();
 ctx.moveTo(margin, height);
 ctx.lineWidth = 2;
 ctx.lineTo(width, height);
 ctx.stroke();
 
-
-
-ctx.save()
-
+// title x and y axes
 ctx.font = "8px Arial"
-// #ctx.rotate(-Math.PI/2);
 ctx.fillText("temperature", 5, height/2)
-ctx.restore()
-
-ctx.font = "8px Arial"
 ctx.fillText("Year 2017", width/2, 145)
 
-
+// months on the x-axis
 var start = (width - margin)/12
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 ctx.font = "7px Arial"
@@ -150,13 +146,12 @@ for (i = 0; i < 12; i++)
 	margin += start
 }
 
-
 // title 
 ctx.font = "10px Arial";
 ctx.fillText("Temperature at the De Bilt",10,10);
 
 
-// data points/lines
+// plot data in graph
 ctx.beginPath();
 ctx.lineJoin="round";
 ctx.moveTo(x_axis[0], y_axis[0]);
