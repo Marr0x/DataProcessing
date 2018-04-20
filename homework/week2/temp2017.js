@@ -1,7 +1,7 @@
 /**
 * Data Processing
 * Marwa Ahmed, student number 10747141
-*
+* Assignment JavaScript line graph
 **/
 
 function reqListener (){
@@ -76,15 +76,14 @@ function reqListener (){
 	// coordinates y-as 
 	var min_temp = Math.min(...temp) 
 	var max_temp = Math.max(...temp)
-	var min_y_screen = 50
-	var max_y_sreen = 125
+	var min_y_screen = 100
+	var max_y_sreen =  500
 
 
 	var temp_transform = createTransform([min_temp, max_temp],[max_y_sreen, min_y_screen])
 
 	y_axis = []
-	for (i = 0; i < temp.length; i++)
-	{
+	for (i = 0; i < temp.length; i++){
 		var y = temp_transform(temp[i])
 		y_axis.push(y)
 	}
@@ -93,16 +92,15 @@ function reqListener (){
 	// coordinates x-as 
 	var min_date = Math.min(...jsdates)
 	var max_date = Math.max(...jsdates)
-	var min_x_screen = 50
-	var max_x_screen = 250
+	var min_x_screen = 100
+	var max_x_screen = 900
 
 	// 
 	var date_transform = createTransform([min_date, max_date], [min_x_screen, max_x_screen])
 
 	// transform dates in millisec and then in the right coordinates 
 	x_axis = []
-	for (i = 0; i < jsdates.length; i++)
-	{
+	for (i = 0; i < jsdates.length; i++){
 		var millisec = jsdates[i].getTime()
 
 		var x = date_transform(millisec)
@@ -113,9 +111,9 @@ function reqListener (){
 
 
 	// 
-	var height = 125
-	var width = 250 
-	var margin = 50
+	var height = 500
+	var width = 900
+	var margin = 100
 
 
 	// draw y-axis line
@@ -135,25 +133,24 @@ function reqListener (){
 	// title x and y axes
 
 	
-	ctx.font = "8px Arial"
+	ctx.font = "20px Arial"
 	
 	ctx.save()
 	ctx.translate(0,0)
 	ctx.rotate(-Math.PI/2)
-	ctx.fillText("temperature", -height, 30)
+	ctx.fillText("temperature (Celsius)", -400, 30)
 	ctx.restore()
-	ctx.font = "8px Arial"
-	ctx.fillText("Year 2017", width/2, 145)
+	ctx.font = "20px Arial"
+	ctx.fillText("Months 2017", width/2, height + 75)
 
 	// values y-axis 
 	var len_y = (height - margin)/6
 	var y_temp = [25, 20, 15, 10, 5, 0, -5]
-	ctx.font = "6px Ariel"
+	ctx.font = "15px Arial"
 
 	var margin_y = margin
-	for (i = 0; i < 7; i++)
-	{
-		ctx.fillText(y_temp[i], 35, margin_y)
+	for (i = 0; i < 7; i++){
+		ctx.fillText(y_temp[i], 50, margin_y)
 		margin_y += len_y
 
 	}
@@ -162,17 +159,16 @@ function reqListener (){
 	// months on the x-axis
 	var len_month = (width - margin)/12
 	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
-	ctx.font = "7px Arial"
+	ctx.font = "15px Arial"
 
-	for (i = 0; i < 12; i++)
-	{
-		ctx.fillText(months[i], margin, 135)
+	for (i = 0; i < 12; i++){
+		ctx.fillText(months[i], margin, height + 25)
 		margin += len_month
 	}
 
 	// title 
-	ctx.font = "10px Arial";
-	ctx.fillText("Temperature at the De Bilt",10,10);
+	ctx.font = "20px Arial";
+	ctx.fillText("Average temperature at the De Bilt in 2017", 300,50);
 
 
 	// plot data in graph
@@ -181,8 +177,7 @@ function reqListener (){
 	ctx.moveTo(x_axis[0], y_axis[0]);
 	ctx.lineWidth = 1;
 
-	for (i = 0; i < x_axis.length; i++)
-	{
+	for (i = 0; i < x_axis.length; i++){
 		ctx.lineTo(x_axis[i + 1], y_axis[i + 1]);
 	}
 	ctx.stroke();
