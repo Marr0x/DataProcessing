@@ -41,20 +41,25 @@ def extract_tvseries(dom):
         info_serie = []
 
         title = serie.h3.a.text
-        info_serie.append(title)
+        # info_serie.append(title)
 
         rating = serie.strong.text
-        info_serie.append(rating)
+        # info_serie.append(rating)
 
         genre = serie.p.find("span", {"class": "genre"}).string.strip()
-        info_serie.append(genre)
+        # info_serie.append(genre)
 
         actors = serie.select("p")[2].text.strip("Stars: \n").replace("\n", "")
-        info_serie.append(actors)
+        # info_serie.append(actors)
 
         runtime = serie.p.find("span", {"class": "runtime"}).string.strip(" min")
-        info_serie.append(runtime)
+        if not runtime:
+            info_serie.append("No runtime")
+        else:
+            info_serie.append(runtime)
 
+        info_serie = [title, rating, genre, actors, runtime]
+        
         # store all lists in a list
         list_tv_series.append(info_serie)
 

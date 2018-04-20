@@ -12,10 +12,10 @@
 function reqListener (){
 
 	// return text received from server following a request
-	var raw_data = this.responseText;
+	var rawData = this.responseText;
 
 	// split each row of data file
-	var rows = raw_data.split('\n', 365);
+	var rows = rawData.split('\n', 365);
 
 	// variables to store the dates and temperature separately 
 	var date = [];
@@ -49,14 +49,14 @@ function reqListener (){
 	* range_max = alpha * domain_max + beta
 	**/
 	function createTransform(domain, range) {
-		var domain_min = domain[0];
-		var domain_max = domain[1];
-		var range_min = range[0];
-		var range_max = range[1];
+		var domainMin = domain[0];
+		var domainMax = domain[1];
+		var rangeMin = range[0];
+		var rangeMax = range[1];
 
 		// formules to calculate the alpha and the beta
-		var alpha = (range_max - range_min) / (domain_max - domain_min);
-		var beta = range_max - alpha * domain_max;
+		var alpha = (rangeMax - rangeMin) / (domainMax - domainMin);
+		var beta = rangeMax - alpha * domainMax;
 
 		// returns the function for the linear transformation (y = a * x + b)
 		return function(x){
@@ -100,71 +100,72 @@ function reqListener (){
 	ctx.font = "20px Arial";
 	ctx.fillText("Month", width/2, height + margin/2);
 
-	// put values (temperatures) on y-axis (I know this is hardcoded...)
-	// min and max temps are between -5 and 25 celsius
-	var distance_temp = (height - margin)/6;
-	var y_temp = [25, 20, 15, 10, 5, 0, -5];
-	ctx.font = "15px Arial";
-
-	// '7' = going from -5 to 25 in steps of 5 
-	var margin_y = margin;
-	for (var i = 0; i < 7; i++){
-		ctx.fillText(y_temp[i], 75, margin_y);
-		margin_y += distance_temp;
-	}
-
-	// put months on the x-axis (12 months)
-	var len_month = (width - margin)/12;
-	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-	ctx.font = "15px Arial";
-	var margin_x = margin;
-	for (var i = 0; i < 12; i++){
-		ctx.fillText(months[i], margin_x, height + 25);
-		margin_x += len_month;
-	}
-
 	// title of graph
 	ctx.font = "20px Arial";
-	ctx.fillText("Average temperature in the De Bilt in 2017", margin * 3, margin/2);
+	ctx.fillText("Average temperature in the De Bilt (NL) in 2017", margin * 3, margin/2);
 
 	// coordinates y-as 
-	var min_temp = Math.min(...temp); 
-	var max_temp = Math.max(...temp);
-	var min_y_screen = 100;
-	var max_y_sreen =  500;
+	var minTemp = Math.min(...temp); 
+	var maxTemp = Math.max(...temp);
+	var minYScreen = 100;
+	var maxYScreen =  500;
 
 	// function to transform temperature data into screen coordinates
-	var temp_transform = createTransform([min_temp, max_temp],[max_y_sreen, min_y_screen]);
-	y_axis = []
+	var tempTransform = createTransform([minTemp, maxTemp],[maxYScreen, minYScreen]);
+	yAxis = []
 	for (var i = 0; i < temp.length; i++){
-		var y = temp_transform(temp[i]);
-		y_axis.push(y);
+		var y = tempTransform(temp[i]);
+		yAxis.push(y);
 	}
 
 	// coordinates x-as 
-	var min_date = Math.min(...jsdates);
-	var max_date = Math.max(...jsdates);
-	var min_x_screen = 100;
-	var max_x_screen = 900;
+	var minDate = Math.min(...jsdates);
+	var maxDate = Math.max(...jsdates);
+	var minXScreen = 100;
+	var maxXScreen = 900;
 
 	// function to transform dates into screen coordinates
-	var date_transform = createTransform([min_date, max_date], [min_x_screen, max_x_screen]);
+	var dateTransform = createTransform([minDate, maxDate], [minXScreen, maxXScreen]);
 
 	// transform dates in millisec and then in the right coordinates 
-	x_axis = [];
+	xAxis = [];
 	for (var i = 0; i < jsdates.length; i++){
 		var millisec = jsdates[i].getTime();
-		var x = date_transform(millisec);
-		x_axis.push(x);
+		var x = dateTransform(millisec);
+		xAxis.push(x);
+	}
+
+	// put values (temperatures) on y-axis (I know this is hardcoded...)
+	// min and max temps are between -5 and 25 celsius
+	var distanceTemp = (height - margin)/6;
+	var yTemp = [25, 20, 15, 10, 5, 0, -5];
+	ctx.font = "15px Arial";
+
+	// '7' = going from -5 to 25 in steps of 5 
+	var marginY = margin;
+	for (var i = 0; i < 7; i++){
+		ctx.fillText(yTemp[i], 75, marginY);
+		marginY += distanceTemp;
+	}
+
+	// put months on the x-axis (12 months)
+	var distanceMonth = (width - margin)/12;
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+	ctx.font = "15px Arial";
+	var marginX = margin;
+	for (var i = 0; i < 12; i++){
+		ctx.fillText(months[i], marginX, height + 25);
+		marginX += distanceMonth;
 	}
 
 	// plot the data in the graph (start 1 Jan 2017, end 31 Dec 2017)
 	ctx.beginPath();
 	ctx.lineJoin="round";
-	ctx.moveTo(x_axis[0], y_axis[0]);
+	ctx.moveTo(xAxis[0], yAxis[0]);
 	ctx.lineWidth = 1;
-	for (var i = 0; i < x_axis.length; i++){
-		ctx.lineTo(x_axis[i + 1], y_axis[i + 1]);
+	for (var i = 0; i < xAxis.length; i++){
+		ctx.lineTo(xAxis[i + 1], yAxis[i + 1]);		
+		ctx.strokeStyle = "#0080ff";
 	}
 	ctx.stroke();
 }
