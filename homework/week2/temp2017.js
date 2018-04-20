@@ -8,7 +8,6 @@ function reqListener (){
 
 	var raw_data = this.responseText;
 
-console.log(raw_data)
 
 	// split each row
 	var rows = raw_data.split('\n', 365)
@@ -134,19 +133,41 @@ console.log(raw_data)
 	ctx.stroke();
 
 	// title x and y axes
+
+	
 	ctx.font = "8px Arial"
-	ctx.fillText("temperature", 5, height/2)
+	
+	ctx.save()
+	ctx.translate(0,0)
+	ctx.rotate(-Math.PI/2)
+	ctx.fillText("temperature", -height, 30)
+	ctx.restore()
+	ctx.font = "8px Arial"
 	ctx.fillText("Year 2017", width/2, 145)
 
+	// values y-axis 
+	var len_y = (height - margin)/6
+	var y_temp = [25, 20, 15, 10, 5, 0, -5]
+	ctx.font = "6px Ariel"
+
+	var margin_y = margin
+	for (i = 0; i < 7; i++)
+	{
+		ctx.fillText(y_temp[i], 35, margin_y)
+		margin_y += len_y
+
+	}
+
+
 	// months on the x-axis
-	var start = (width - margin)/12
+	var len_month = (width - margin)/12
 	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 	ctx.font = "7px Arial"
 
 	for (i = 0; i < 12; i++)
 	{
 		ctx.fillText(months[i], margin, 135)
-		margin += start
+		margin += len_month
 	}
 
 	// title 
@@ -169,13 +190,13 @@ console.log(raw_data)
 }
 
 
-
+// new request, to get data from browser
 var oReq = new XMLHttpRequest();
 oReq.addEventListener('load', reqListener);
 oReq.open("GET", "https://raw.githubusercontent.com/Marr0x/DataProcessing/master/homework/week2/data_temp_2017.csv");
 oReq.send();
 
-// http://localhost:8080/
+
 
 
 
