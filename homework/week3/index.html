@@ -5,45 +5,47 @@
 -	Create a bar chart in D3
 -->
 
+<!--
+	Used Sources: http://www.tutorialsteacher.com/d3js/loading-data-from-file-in-d3js
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<script type="text/javascript" src="d3/d3.v3.js"></script>
+		<script type="text/javascript" src="d3/d3.tip.v0.6.3.js"></script>
 		<script type="text/javascript">
 			d3.select("head").append("title").text("Creating an interactive bar chart using D3");
 		</script>
 	</head>
 	<body>
 		<script type="text/javascript">
-			d3.select("body").append("p").text("Name: Marwa Ahmed, Student number: 10747141");
-			d3.select("body").append("p").text("This bar chart visualizes the number of students per province in the Netherlands.");
+			d3.select("body").append("h3").text("Name: Marwa Ahmed, Student number: 10747141");
+			d3.select("body").append("p").text("This bar chart visualizes the number of students for each province in the Netherlands.");
 
-
-// http://www.tutorialsteacher.com/d3js/loading-data-from-file-in-d3js
-			// load data
+			// binding data
 			d3.json("datasets.json", function(error, dataset){
 				if(error) {
 					return console.warn(error);
 				}
 
-				// d3.select("body")
-				// .selectAll("p")
-				// .data(dataset.data)
-				// .enter()
-				// .append("p")
-				// .text(function(d) {
-				// 	return d.province + ',' + d.NoStudents; 
-				// });
-
-
-				// width and height
-				var svgWidth = 600;
-				var svgHeight = 300;
-				var h = 100
+				// variables for width and height etc.
+				var svgWidth = 700;
+				var svgHeight = 400;
 				var barPadding = 1;
+				var widthBar = svgWidth/dataset.data.length;
 				var padding = 20;
-				var margin = {left: 20, right: 20, top: 20, bottom: 20};
+				var margin = {left: 50, right: 50, top: 50, bottom: 50};
+				var width = svgWidth - margin.left - margin.right;
+				var height = svgHeight - margin.top - margin.bottom;
+
+
+				// 
+				var provinces = [];
+				for (var i = 0; i < dataset.data.length; i++){
+					provinces.push(dataset.data.province);
+				}
 
 //var maxProv = d3.max(dataset.data, function(d){ return dataset[0] })
 
@@ -52,8 +54,8 @@
 				// 					 .range([margin.left, svgWidth - margin.right]);
 
 
-				// var minData = d3.min(dataset.data, function(d){return d.NoStudents[1]; })
-				// var maxData = d3.max(dataset.data, function(d){return d.NoStudents[1]; })
+				var minData = d3.min(dataset.data, function(d){return d.NoStudents[1]; })
+				var maxData = d3.max(dataset.data, function(d){return d.NoStudents[1]; })
 								
 				// var yScale = d3.scale.linear()
 				// 					 .domain([minData, maxData])
@@ -67,27 +69,49 @@
 				// create svg element
 				var svg = d3.select("body")
 							.append("svg")
+							.attr("class", "bar")
 							.attr("width", svgWidth)
 							.attr("height", svgHeight);
+							// .style("height", function(d){
+							// 	var barHeight = d.NoStudents/250;
+							// 	return barHeight + "px"; 
+							// });
 
-							svg.selectAll("rect")
+				// draw the rectangles from the data
+				var rectangles = svg.selectAll("rect")
 							.data(dataset.data)
 							.enter()
 							.append("rect")
+							
+							// i is a numeric index value of the current element
 							.attr("x", function(d, i){
 								//return xScale(d.province.length)
-								return i * (svgWidth/dataset.data.length);
+								// push each subsequent bar to the right
+								return i * (widthBar);
 							})
-							//height minus data value
+							
+							// top bar = height minus data value
 							.attr("y", function(d){
 								return svgHeight - d.NoStudents/250;
 							})
-							.attr("width", svgWidth/dataset.data.length - barPadding)
+							
+							// dynamic bar width
+							.attr("width", widthBar - barPadding)
+							
+							// encode data as the height of each bar
 							.attr("height", function(d){
 								return d.NoStudents/250;
 							})
-							 .attr("fill", "teal");
 
+							// color the bar chart
+							.attr("fill", "teal");
+
+							// I can only make this work if the scaling works :(
+							// .attr("fill", function(d){
+							// 	return "rgb(0, 0, " + (d.NoStudents ...)) + ")";
+							// });
+
+							// show actual data values by adding labels
 							svg.selectAll("text")
 								.data(dataset.data)
 								.enter()
@@ -95,24 +119,29 @@
 								.text(function(d){
 									return d.NoStudents;
 								})
+
+								// center the text horizontally at the assigned x value
 								.attr("text-anchor", "middle")
+
+								// set x position of text to the left edge of each bar plus half the bar width
 								.attr("x", function(d, i){
-									return i * (svgWidth/dataset.data.length) + (svgWidth/dataset.data.length - barPadding)/ 2;
+									return i * widthBar + (widthBar - barPadding)/ 2;
 								})
+
+								// y position of text value
 								.attr("y", function(d){
-									return svgHeight - (d.NoStudents/10000);
+									return svgHeight - (d.NoStudents/250);
 								})
 								.attr("font-family", "sans-serif")
 								.attr("font-size", "11px")
-								.attr("fill", "");
+								.attr("fill", "black");
 
 					// Axis
-					var xAxis = d3.svg.axis()
-
-
-
+					//var xAxis = d3.svg.axis()
 			});
+
 		</script>
+
 
 
 <!-- 		<svg width="500" height="100">
@@ -120,6 +149,8 @@
 			<line x1="0" y1="100" x2="500" y2="100" stroke="black"/>
 			<text x="250" y="15">Title</text>
 		</svg> -->
+
+
 
 		<div class="bar"></div>
 	</body>
