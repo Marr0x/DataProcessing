@@ -34,37 +34,31 @@
 				var svgWidth = 700;
 				var svgHeight = 400;
 				var barPadding = 1;
-				var widthBar = svgWidth/dataset.data.length;
-				var padding = 20;
 				var margin = {left: 50, right: 50, top: 50, bottom: 50};
-				var width = svgWidth - margin.left - margin.right;
-				var height = svgHeight - margin.top - margin.bottom;
+				var horizontalRange = svgWidth - margin.right;
+				var verticalRange = svgHeight - margin.top;
+				var widthBar = (horizontalRange-margin.left)/dataset.data.length;
 
 
-				// 
+				// push data for x-axis in array
 				var provinces = [];
 				for (var i = 0; i < dataset.data.length; i++){
 					provinces.push(dataset.data.province);
 				}
 
-//var maxProv = d3.max(dataset.data, function(d){ return dataset[0] })
+				// scale-function for the x-axis
+				var xScale = d3.scale.ordinal()
+					 .domain([0, dataset.data.length])
+					 .range([margin.left, horizontalRange]);
 
-				// var xScale = d3.scale.ordinal()
-				// 					 .domain(dataset.data.map(function(d){ return d.province ; } ))
-				// 					 .range([margin.left, svgWidth - margin.right]);
+				// min and max value from data (y-axis)
+				var minData = d3.min(dataset.data, function(d){return d.NoStudents; })
+				var maxData = d3.max(dataset.data, function(d){return d.NoStudents; })
 
-
-				var minData = d3.min(dataset.data, function(d){return d.NoStudents[1]; })
-				var maxData = d3.max(dataset.data, function(d){return d.NoStudents[1]; })
-								
-				// var yScale = d3.scale.linear()
-				// 					 .domain([minData, maxData])
-				// 					 .range([margin.top, svgHeight - margin.bottom]);
-								
-				// var yScale = d3.scale.linear()
-				// 					 .domain([0, maxData])
-				// 					 .range([0, svgHeight]);
-
+				// scale-function for y-axis
+				var yScale = d3.scale.linear()
+									.domain([0, maxData])
+									.range([margin.top, verticalRange - margin.bottom]);
 
 				// create svg element
 				var svg = d3.select("body")
@@ -72,10 +66,6 @@
 							.attr("class", "bar")
 							.attr("width", svgWidth)
 							.attr("height", svgHeight);
-							// .style("height", function(d){
-							// 	var barHeight = d.NoStudents/250;
-							// 	return barHeight + "px"; 
-							// });
 
 				// draw the rectangles from the data
 				var rectangles = svg.selectAll("rect")
@@ -83,16 +73,14 @@
 							.enter()
 							.append("rect")
 							
-							// i is a numeric index value of the current element
 							.attr("x", function(d, i){
-								//return xScale(d.province.length)
 								// push each subsequent bar to the right
-								return i * (widthBar);
+								return (i * xScale(widthBar)) + margin.left;
 							})
 							
 							// top bar = height minus data value
 							.attr("y", function(d){
-								return svgHeight - d.NoStudents/250;
+								return verticalRange - yScale(d.NoStudents);
 							})
 							
 							// dynamic bar width
@@ -100,16 +88,11 @@
 							
 							// encode data as the height of each bar
 							.attr("height", function(d){
-								return d.NoStudents/250;
+								return yScale(d.NoStudents);
 							})
 
 							// color the bar chart
 							.attr("fill", "teal");
-
-							// I can only make this work if the scaling works :(
-							// .attr("fill", function(d){
-							// 	return "rgb(0, 0, " + (d.NoStudents ...)) + ")";
-							// });
 
 							// show actual data values by adding labels
 							svg.selectAll("text")
@@ -125,12 +108,12 @@
 
 								// set x position of text to the left edge of each bar plus half the bar width
 								.attr("x", function(d, i){
-									return i * widthBar + (widthBar - barPadding)/ 2;
+									return i * xScale(widthBar) + (xScale(widthBar) - barPadding)/ 2 + margin.left;
 								})
 
 								// y position of text value
 								.attr("y", function(d){
-									return svgHeight - (d.NoStudents/250);
+									return verticalRange - yScale(d.NoStudents);
 								})
 								.attr("font-family", "sans-serif")
 								.attr("font-size", "11px")
