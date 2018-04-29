@@ -176,26 +176,3 @@ oReq.addEventListener('load', reqListener);
 oReq.open("GET", "https://raw.githubusercontent.com/Marr0x/DataProcessing/master/homework/week2/data_temp_2017.csv");
 oReq.send();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
