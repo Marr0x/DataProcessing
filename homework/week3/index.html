@@ -20,8 +20,7 @@
 		<script type="text/javascript">
 			d3.select("head").append("title").text("Creating an interactive bar chart using D3");
 		</script>
-		<script type="text/css">
-			
+		<script type="text/css">		
 			.axis path,
 			.axis line {
 				fill: none;
@@ -35,8 +34,7 @@
 			}
 		</script>
 		<style>
-			
-			/* source https://github.com/Caged/d3-tip/blob/master/examples/bars.html */
+			/* source:; https://github.com/Caged/d3-tip/blob/master/examples/bars.html */
 			rect {
 			    fill: teal;
 			    fill-opacity: 1;
@@ -113,7 +111,7 @@
 							.attr("width", svgWidth)
 							.attr("height", svgHeight);
 
-				// make a tooltip, Source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7
+				// make a tooltip, source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7
 				var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 				var g = svg.append("g")
     	   				   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -188,7 +186,7 @@
 
 				// call the xAxis function to create the x-axis
 				svg.append("g")
-				   .attr("class", "axis")
+				   .attr("class", "x axis")
 				   .attr("transform", "translate(0," + (svgHeight - margin.top) + ")")
 				   .call(xAxis);
 
@@ -199,7 +197,7 @@
 
 				// call the yAxis function to create the y-axis
 				svg.append("g")
-				   .attr("class", "axis")
+				   .attr("class", "y axis")
 				   .attr("transform", "translate(" + margin.left + ",100)")
 				   .call(yAxis);
 			});
