@@ -6,9 +6,9 @@
 -->
 
 <!--
-	Used Sources: 
-	http://www.tutorialsteacher.com/d3js/loading-data-from-file-in-d3js
-	http://alignedleft.com/tutorials/d3
+-	Used Sources: 
+-	Load data: http://www.tutorialsteacher.com/d3js/loading-data-from-file-in-d3js
+-	Almost everything: http://alignedleft.com/tutorials/d3
 -->
 
 <!DOCTYPE html>
@@ -34,8 +34,39 @@
 				font-size: 11px;
 			}
 		</script>
+		<style>
+			
+			/* source https://github.com/Caged/d3-tip/blob/master/examples/bars.html */
+			rect {
+			    fill: teal;
+			    fill-opacity: 1;
+			}
+			rect:hover {
+				fill: teal;
+			    fill-opacity: 0.3;
+			}
+
+			/* source: http://bl.ocks.org/d3noob/a22c42db65eb00d4e369 */
+			.toolTip {
+			  position: absolute;
+			  text-align: center;
+			  color: white;
+			  width: auto;
+			  height: auto;
+			  background: #bcbddc;
+			  border: 0px;
+			  border-radius: 10px;
+			  padding: 2px;
+			}
+		</style>
 	</head>
 	<body>
+		<a class="announce" href="https://vignette.wikia.nocookie.net/adventuretimewithfinnandjake/images/c/cd/Sad_meme.jpg/revision/latest?cb=20130305110257">
+			<div class="column">
+				I tried, but it just did not work  
+				<b>#sad</b>
+			</div>	
+		</a>
 		<script type="text/javascript">
 			d3.select("body").append("h3").text("Name: Marwa Ahmed, Student number: 10747141");
 			d3.select("body").append("h4").text("Number of students per province in The Netherlands");
@@ -82,6 +113,11 @@
 							.attr("width", svgWidth)
 							.attr("height", svgHeight);
 
+				// make a tooltip, Source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7
+				var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+				var g = svg.append("g")
+    	   				   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 				// draw the rectangles using the data
 				var rectangles = svg.selectAll("rect")
 									.data(dataset.data)
@@ -107,7 +143,17 @@
 									})
 
 									// color the bar chart
-									.attr("fill", "teal");
+									.attr("fill", "teal")
+									
+									// tooltip, source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7
+									.on("mousemove", function(d){
+							            tooltip
+							              .style("left", d3.event.pageX - 50 + "px")
+							              .style("top", d3.event.pageY - 50 + "px")
+							              .style("display", "inline-block")
+							              .html((d.province) + "<br>" + "Number of students:" + (d.NoStudents));
+							        })
+    								.on("mouseout", function(d){ tooltip.style("display", "none");});
 
 									// show actual data values by adding labels
 									svg.selectAll("text")
@@ -156,12 +202,7 @@
 				   .attr("class", "axis")
 				   .attr("transform", "translate(" + margin.left + ",100)")
 				   .call(yAxis);
-				
-				// 
-
-
 			});
-
 		</script>
 	</body>
 </html>
