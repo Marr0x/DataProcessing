@@ -2,30 +2,38 @@
 -	Course: Data Processing 
 -	Name: Marwa Ahmed 
 -	Student number: 10747141
--	D3 Scatterplot
+-	Assignment: D3 Scatterplot
 -->
 
 <!DOCTYPE html>
 <html>
-  <head>
-  		<title>D3 Scatterplot</title>
-  		<meta charset="utf-8">
-  		<link rel="stylesheet" type="text/css" href="scatter.css">
+	<head>
+		<title>D3 Scatterplot</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="scatter.css">
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script type="text/javascript" src="d3/d3.tip.v0.6.3.js"></script>
 		<script type="text/javascript" src="scatter.js"></script>
-  </head>
-  <body>
-  		<br>
+	</head>
+	<body>
+		<!-- https://www.w3schools.com/howto/howto_js_dropdown.asp -->
+		<div class = "dropdown">
+			<button onclick="myFunction()" class="dropbtn">Year</button>
+			<div id="myDropdown" class="dropdown-content">
+				<a href="#">2015</a>
+				<a href="#">2016</a>
+				<a href="#">2017</a>
+			</div>
+		</div>
+		<p></p>
+<!-- 		<br>
 			<a>Marwa Ahmed, student number 10747141</a>
 		</br>
 		<br>
 			<a>Assignment: D3 Scatterplot</a>
-		</br>
+		</br> -->
 		<br>
 			<a>Source: </a><a href = "https://www.oecd-ilibrary.org/economics/data/main-economic-indicators/international-trade_data-00045-en">OECD ilibrary - International trade</a>
 		</br>
-    <!-- This is where your bar chart will go -->
-  </body>
-
+	</body>
 </html>
