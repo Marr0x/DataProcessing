@@ -1,45 +1,27 @@
 /**	Course: Data Processing 
 *	Name: Marwa Ahmed 
 *	Student number: 10747141
-*	D3 Scatterplot 
+*	Assignment: D3 Scatterplot 
 **/
 
 
 svg { 
 	border: 1px solid grey;
-	height: 500px; 
-	width: 800px; 
-	/*background-color: #C7D9D9;*/
 }
+
 
 circle {
 	opacity: 0.75;
 
 }
 
-name {
-	font-size: 10;
-}
 
-
-tooltip {
-  position: absolute;
-  text-align: center;
-  width: 60px;
-  height: 28px;
-  padding: 2px;
-  font: 12px sans-serif;
-  background: lightsteelblue;
-  border: 0px;
-  border-radius: 8px;
-}
-
-/* https://www.w3schools.com/howto/howto_js_dropdown.asp */
+/* Source: https://www.w3schools.com/howto/howto_js_dropdown.asp */
 /* Dropdown Button */
 .dropbtn {
-    background-color: #3498DB;
+    background-color: #08306b;
     color: white;
-    padding: 16px;
+    padding: 10px;
     font-size: 16px;
     border: none;
     cursor: pointer;
