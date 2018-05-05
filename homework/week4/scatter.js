@@ -224,7 +224,7 @@ function makeScatterplot(error, response) {
 			  .style("text-anchor", "begin")
 			  .text(function(d, i) { return countryName[i];
 			  });
-
+};
 
 // this part doesnot work yet...
 // source button code: https://www.w3schools.com/howto/howto_js_dropdown.asp
@@ -254,11 +254,7 @@ window.onclick = function(event) {
       }
     }
   }
-}
 };
-
-
-
 
 
 
