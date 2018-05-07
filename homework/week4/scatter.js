@@ -84,9 +84,9 @@ function convertData(error, response) {
 	globalCountry = countryName;
 
 	makeScatterplot(infoYear, countryName)
-	console.log(infoYear)
 };
 
+// make globalvariables of the scale functions
 var xScale;
 var yScale;
 var rScale;
@@ -239,14 +239,6 @@ function makeScatterplot(infoYear, countryName, Year = 0) {
 
 
 /*
-* Update the graph
-*/
-// function updateFig(year){
-// 	makeScatterplot(globalYear, globalCountry, year);
-// }
-
-
-/*
 * 
 */
 function update(year){
@@ -257,7 +249,6 @@ function update(year){
 	.duration(500)
 	.attr("cx", function(d){
 				// import
-				console.log(xScale);
 				return xScale(d[1]);
 			})
 			.attr("cy", function(d){
