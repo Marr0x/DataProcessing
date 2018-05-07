@@ -24,7 +24,7 @@ var globalCountry;
 function getData(){
 
 	// API request
-	var trade = "http://stats.oecd.org/SDMX-JSON/data/MEI_TRD/XTEXVA01+XTIMVA01+XTNTVA01.AUS+BEL+CAN+DNK+EST+FIN+FRA+GRC+ISL+IRL+ITA+JPN+LUX+NLD+NOR+PRT+ESP+SWE+CHE+GBR.CXML.A/all?startTime=2015&endTime=2017&dimensionAtObservation=allDimensions";
+	var trade = "https://stats.oecd.org/SDMX-JSON/data/MEI_TRD/XTEXVA01+XTIMVA01+XTNTVA01.AUS+BEL+CAN+DNK+EST+FIN+FRA+GRC+ISL+IRL+ITA+JPN+LUX+NLD+NOR+PRT+ESP+SWE+CHE+GBR.CXML.A/all?startTime=2015&endTime=2017&dimensionAtObservation=allDimensions";
 
 	// put data in a queue, so the scatterplot will be made after everything is loaded
 	d3.queue()
