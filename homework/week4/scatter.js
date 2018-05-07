@@ -80,6 +80,7 @@ function convertData(error, response) {
 	globalYear = infoYear;
 	globalCountry = countryName;
 
+	// push data to the makeScatterplot function
 	makeScatterplot(infoYear, countryName)
 };
 
@@ -116,14 +117,18 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 
 	// scale-function for the x-axis
 	xScale = d3.scaleLinear()
-			   .domain([d3.min(infoYear[Year], function(d){return d[1]}), d3.max(infoYear[Year], function(d){
-						return d[1]; })]).nice()
+			   .domain([d3.min(infoYear[Year], function(d){
+			   			return d[1]; }), 
+			   			d3.max(infoYear[Year], function(d){ 
+			   			return d[1]; })
+			   		   ]).nice()
 			   .range([margin.left, width - margin.right]);
 
 	// scale-function for the y-axis
 	yScale = d3.scaleLinear()
 			   .domain([0, d3.max(infoYear[Year], function(d){
-						return d[0]; })]).nice()
+						return d[0]; })
+			   		   ]).nice()
 			   .range([height - margin.left, 0]);
 
 	// scale-function for the radius of the circles, radius depends on the Net trade
@@ -133,9 +138,9 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			   .domain([minNet, maxNet])
 			   .range([2, 8]);
 
-	// scale-function for the colors of the circles, color depends on the county
+	// scale-function for the colors of the circles, color depends on the county(name)
 	cScale = d3.scaleOrdinal(d3.schemeCategory20)
-				   .domain(countryName);
+			   .domain(countryName);
 
 	// draw the x axis
 	var xAxis = svg.append("g")
@@ -177,11 +182,11 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 		.enter()
 		.append("circle")
 		.attr("cx", function(d){
-			// import
+			// import on x-axis
 			return xScale(d[1]);
 		})
 		.attr("cy", function(d){
-			// export
+			// export on y-axis
 			return yScale(d[0]);
 		})
 		.attr("r", function (d){ 
@@ -189,6 +194,7 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			return rScale(d[2]);
 		})
 		.style("fill", function(d, i){
+			// color depends on county
 			return (cScale(countryName[i]));
 		})
 
@@ -204,54 +210,52 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			tooltip.style("display", "none");
 		});
 
-		// draw legend
-		var legend = svg.selectAll(".legend")
-						.data(infoYear[Year])
-						.enter().append("g")
-						.attr("class", "legend")
-						.attr("transform", function(d, i) { 
-							return "translate(0," + i * 15 + ")"; 
-						});
+	// draw legend
+	var legend = svg.selectAll(".legend")
+					.data(infoYear[Year])
+					.enter().append("g")
+					.attr("class", "legend")
+					.attr("transform", function(d, i) { 
+						return "translate(0," + i * 15 + ")"; 
+					});
 
-		// draw legend colored rectangles
-		// the legend is not correct
-		legend.append("rect")
-			  .attr("x", width - margin.left)
-			  .attr("width", 10)
-			  .attr("height", 10)
-			  .style("fill", function(d, i){ 
-					return cScale(countryName[i])
-			  });
+	// draw legend colored rectangles
+	legend.append("rect")
+		  .attr("x", width - margin.left)
+		  .attr("width", 10)
+		  .attr("height", 10)
+		  .style("fill", function(d, i){ 
+				return cScale(countryName[i])
+		  });
 
-		// draw legend text
-		legend.append("text")
-			  .attr("x", width - margin.left/2)
-			  // text 5px lower
-			  .attr("y", 5)
-			  .attr("dy", ".400em")
-			  .style("text-anchor", "begin")
-			  .text(function(d, i) { 
-			  		return countryName[i];
-			  });
-
+	// draw legend text
+	legend.append("text")
+		  .attr("x", width - margin.left/2)
+		  // text 5px lower the position of rect
+		  .attr("y", 5)
+		  .attr("dy", ".400em")
+		  .style("text-anchor", "begin")
+		  .text(function(d, i) { 
+		  		return countryName[i];
+		  });
 };
 
 
 /*
-* Update the data.
+* This function updates the data when user clicks on the button and chooses a year.
 */
 function update(year){
-	// 
+
 	var svg = d3.select("svg")
 	var circles = d3.selectAll("circle").data(globalYear[year])
 	.transition()
 	.duration(500)
 	.attr("cx", function(d){
-		// import
+		// import on x-axis
 		return xScale(d[1]);
 	})
 	.attr("cy", function(d){
-		// export
+		// export on y-axis
 		return yScale(d[0]);
 	})
 	.attr("r", function (d){ 
@@ -259,12 +263,10 @@ function update(year){
 		return rScale(d[2]);
 	})
 	.style("fill", function(d, i){
+		// color depends on county(name)
 		return (cScale(globalCountry[i]));
 	});
 };
-
-
-
 
 
 
