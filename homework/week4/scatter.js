@@ -1,6 +1,6 @@
 /**
 * Data Processing
-* Marwa Ahmed, student number 10747141
+* Marwa Ahmed, Student number 10747141
 * Assignment: D3 Scatterplot
 * Source data: https://www.oecd-ilibrary.org/economics/data/main-economic-indicators/international-trade_data-00045-en
 **/
@@ -24,7 +24,6 @@ var globalCountry;
 function getData(){
 
 	// API request
-//	var trade = "https://stats.oecd.org/SDMX-JSON/data/MEI_TRD/XTEXVA01+XTIMVA01+XTNTVA01.AUS+BEL+CAN+CHL+DNK+EST+FIN+FRA+GRC+HUN+ISL+IRL+ITA+JPN+KOR+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR.CXML.A/all?startTime=2015&endTime=2017&dimensionAtObservation=allDimensions";
 	var trade = "http://stats.oecd.org/SDMX-JSON/data/MEI_TRD/XTEXVA01+XTIMVA01+XTNTVA01.AUS+BEL+CAN+DNK+EST+FIN+FRA+GRC+ISL+IRL+ITA+JPN+LUX+NLD+NOR+PRT+ESP+SWE+CHE+GBR.CXML.A/all?startTime=2015&endTime=2017&dimensionAtObservation=allDimensions";
 
 	// put data in a queue, so the scatterplot will be made after everything is loaded
@@ -89,7 +88,6 @@ var xScale;
 var yScale;
 var rScale;
 var cScale;
-var ccScale;
 
 /** 
 * Make scatterplot. (Year 0 is 2015, 1 is 2016, 2 is 2017)
@@ -135,12 +133,8 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			   .domain([minNet, maxNet])
 			   .range([2, 8]);
 
-	// scale-function for the colors of the circles, color depends on the Net trade
-	cScale = d3.scaleOrdinal(d3.schemeCategory20)
-					.domain([minNet, maxNet]);
-
 	// scale-function for the colors of the circles, color depends on the county
-	ccScale = d3.scaleOrdinal(d3.schemeCategory20)
+	cScale = d3.scaleOrdinal(d3.schemeCategory20)
 				   .domain(countryName);
 
 	// draw the x axis
@@ -195,7 +189,7 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			return rScale(d[2]);
 		})
 		.style("fill", function(d, i){
-			return (ccScale(countryName[i]));
+			return (cScale(countryName[i]));
 		})
 
 		// when hovering over the datapoints show name of country 
@@ -226,7 +220,7 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			  .attr("width", 10)
 			  .attr("height", 10)
 			  .style("fill", function(d, i){ 
-					return ccScale(countryName[i])
+					return cScale(countryName[i])
 			  });
 
 		// draw legend text
@@ -240,7 +234,6 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			  		return countryName[i];
 			  });
 
-	//update(makeScatterplot)
 };
 
 
@@ -266,7 +259,7 @@ function update(year){
 		return rScale(d[2]);
 	})
 	.style("fill", function(d, i){
-		return (ccScale(globalCountry[i]));
+		return (cScale(globalCountry[i]));
 	});
 };
 
