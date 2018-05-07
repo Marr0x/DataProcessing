@@ -9,17 +9,13 @@
 // call main function when whole code is loaded
 window.onload = function() {
 	getData();
+
 };
-
-
-// make global variables 
-var globalYear;
-var globalCountry;
 
 
 /**
 * This function gets the data from an API request and places it in a queue. 
-* When all data is loaded it calls the function convertData.
+* When all data is loaded it calls the function makeScatterplot, to make the scatterplot.
 **/
 function getData(){
 
@@ -29,15 +25,15 @@ function getData(){
 	// put data in a queue, so the scatterplot will be made after everything is loaded
 	d3.queue()
 	  .defer(d3.request, trade)
-	  .awaitAll(convertData);
+	  .awaitAll(makeScatterplot);
 };
 
 
 /**
 * This function converts the data from the API request into a JSON, 
-* then extracts all needed data from the JSON.
+* then extracts all needed data from the JSON and makes a scatterplot form that data.
 **/
-function convertData(error, response) {
+function makeScatterplot(error, response) {
 	if (error) throw error;
 	
 	// convert data to JSON
@@ -80,23 +76,10 @@ function convertData(error, response) {
 		countryName.push(dataTrade.structure.dimensions.observation[1].values[i].name);
 	}
 
-	globalYear = infoYear;
-	globalCountry = countryName;
+	/** 
+	* Make scatterplot
+	**/
 
-	makeScatterplot(infoYear, countryName)
-	console.log(infoYear)
-};
-
-var xScale;
-var yScale;
-var rScale;
-var cScale;
-
-/** 
-* Make scatterplot
-**/
-function makeScatterplot(infoYear, countryName, Year = 0) {
-	
 	// set dimentions and margins of the graph
 	var margin = {top: 50, right: 100, bottom: 100, left: 50};
 	var width = 900 - margin.left - margin.right;
@@ -118,27 +101,36 @@ function makeScatterplot(infoYear, countryName, Year = 0) {
 					.style("position", "absolute");
 
 	// scale-function for the x-axis
-	 xScale = d3.scaleLinear()
-			  .domain([d3.min(infoYear[Year], function(d){return d[1]}), d3.max(infoYear[Year], function(d){
+	var xScale = d3.scaleLinear()
+			  .domain([d3.min(infoYear[0], function(d){return d[1]}), d3.max(infoYear[0], function(d){
 						return d[1]; })]).nice()
 			  .range([margin.left, width - margin.right]);
 
 	// scale-function for the y-axis
-	 yScale = d3.scaleLinear()
-					.domain([0, d3.max(infoYear[Year], function(d){
+	var yScale = d3.scaleLinear()
+					.domain([0, d3.max(infoYear[0], function(d){
 						return d[0]; })]).nice()
 					.range([height - margin.left, 0]);
 
 	// scale-function for the radius of the circles, radius depends on the Net trade
-	var minNet = d3.min(infoYear[Year], function(d){return d[2]; });
-	var maxNet = d3.max(infoYear[Year], function(d){return d[2]; });
-	 rScale = d3.scaleLinear()
+	var minNet = d3.min(infoYear[0], function(d){return d[2]; });
+	var maxNet = d3.max(infoYear[0], function(d){return d[2]; });
+	var rScale = d3.scaleLinear()
 					.domain([minNet, maxNet])
 					.range([2, 8]);
 
+	// I had some problems with the colors of the legend, thats why there are three different color scales here	
 	// scale-function for the colors of the circles, color depends on the Net trade
-	 cScale = d3.scaleOrdinal(d3.schemeCategory20)
+	// var cScale = d3.scaleOrdinal(['#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b'])
+	// 				.domain([minNet, maxNet]);
+
+	// scale-function for the colors of the circles, color depends on the Net trade
+	var cScale = d3.scaleOrdinal(d3.schemeCategory20)
 					.domain([minNet, maxNet]);
+
+	// scale-function for the colors of the circles, color depends on the county
+	var ccScale = d3.scaleOrdinal(d3.schemeCategory20)
+				   .domain(countryName);
 
 	// draw the x axis
 	var xAxis = svg.append("g")
@@ -176,7 +168,7 @@ function makeScatterplot(infoYear, countryName, Year = 0) {
 
 	// draw the datapoints
 	svg.selectAll("circle")
-		.data(infoYear[Year])
+		.data(infoYear[0])
 		.enter()
 		.append("circle")
 		.attr("cx", function(d){
@@ -188,7 +180,7 @@ function makeScatterplot(infoYear, countryName, Year = 0) {
 			return yScale(d[0]);
 		})
 		.attr("r", function (d){ 
-			// radius depends on net trade
+			// net trade
 			return rScale(d[2]);
 		})
 		.style("fill", function(d){
@@ -209,7 +201,7 @@ function makeScatterplot(infoYear, countryName, Year = 0) {
 
 		// draw legend
 		var legend = svg.selectAll(".legend")
-						.data(infoYear[Year])
+						.data(ccScale.domain())
 						.enter().append("g")
 						.attr("class", "legend")
 						.attr("transform", function(d, i) { 
@@ -222,93 +214,47 @@ function makeScatterplot(infoYear, countryName, Year = 0) {
 			  .attr("x", width - margin.left)
 			  .attr("width", 10)
 			  .attr("height", 10)
-			  .style("fill", function(d, i){ return cScale(d[2])});
+			  .style("fill", function(d, i){ return ccScale(d[2])});
 
 		// draw legend text
 		legend.append("text")
 			  .attr("x", width - margin.left/2)
-			  // text 5px lower
-			  .attr("y", 5)
+			  .attr("y", 10)
 			  .attr("dy", ".400em")
 			  .style("text-anchor", "begin")
 			  .text(function(d, i) { return countryName[i];
 			  });
-
-	//update(makeScatterplot)
 };
 
+// this part doesnot work yet...
+// source button code: https://www.w3schools.com/howto/howto_js_dropdown.asp
 
-/*
-* Update the graph
-*/
-// function updateFig(year){
-// 	makeScatterplot(globalYear, globalCountry, year);
-// }
+// var button = d3.selectAll(".year")
+// 				.on("click", function () {
+//
+//						
+// 				}
+// 			)
 
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
 
-/*
-* 
-*/
-function update(year){
-	// join new data with old elements
-	var svg = d3.select("svg")
-	var circles = d3.selectAll("circle").data(globalYear[year])
-	.transition()
-	.duration(500)
-	.attr("cx", function(d){
-				// import
-				console.log(xScale);
-				return xScale(d[1]);
-			})
-			.attr("cy", function(d){
-				// export
-				return yScale(d[0]);
-			})
-			.attr("r", function (d){ 
-				// radius depends on net trade
-				return rScale(d[2]);
-			})
-			.style("fill", function(d){
-				return (cScale(d[2]));
-			});
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
 
-
-	
-	// circles.attr("class", "test");
-
-	// console.log(year)
-	// console.log(globalYear[year])
-	// console.log(circles);
-
-	// // update old elements as needed
-	// circles.attr("class", "update")
-
-	// console.log(circles)
-	// // enter + update
-	// circles.enter().append("circle")
-	// 	   .attr("class", "enter")
-	// 		.attr("cx", function(d){
-	// 			// import
-	// 			console.log(xScale);
-	// 			return xScale(d[1]);
-	// 		})
-	// 		.attr("cy", function(d){
-	// 			// export
-	// 			return yScale(d[0]);
-	// 		})
-	// 		.attr("r", function (d){ 
-	// 			// radius depends on net trade
-	// 			return rScale(d[2]);
-	// 		})
-	// 		.style("fill", function(d){
-	// 			return (cScale(d[2]));
-	// 		});
-
-console.log(circles)
-	// remove old elements as needed
-	// circles.exit().remove();
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
 };
-
 
 
 
