@@ -198,13 +198,14 @@ function makeScatterplot(infoYear, countryName, Year = 2) {
 			return (cScale(countryName[i]));
 		})
 
-		// when hovering over the datapoints show name of country 
+		// when hovering over the datapoints show name of country and net trade
 		.on("mousemove", function(d, i){
 	            return tooltip
-	              .style("left", d3.event.pageX - 20 + "px")
-	              .style("top", d3.event.pageY - 20 + "px")
+	              .style("left", d3.event.pageX - 30 + "px")
+	              .style("top", d3.event.pageY - 40 + "px")
 	              .style("display", "inline-block")
-	              .text(countryName[i]);
+	              .style("font-size", "12px")
+	              .html(countryName[i] + "<br>"+ " Net Trade: " + (d3.format(".1f")(d[2])) + " Billion");
 	        })
 		.on("mouseout", function(d){ 
 			tooltip.style("display", "none");
