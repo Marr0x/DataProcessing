@@ -98,7 +98,7 @@ function convertData(error, response, year = 0) {
 /** 
 * Make bar chart.
 **/
-function makeBarChart(obj, countryName, variableName, year = 0, country) {
+function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 	// set dimentions and margins of the graph
 	var margin = {top: 50, right: 100, bottom: 100, left: 50};
@@ -119,13 +119,14 @@ function makeBarChart(obj, countryName, variableName, year = 0, country) {
 						 .domain(variableName)
 						 .range([margin.left, width - margin.right]);
 
-	// var xScale = d3.scale.ordinal()
-	// 					 .domain(infoCountry.map(function(d){return d[0];}))
-	// 					 .range([margin.left, width - margin.right]);
 
+	var minY = d3.min(obj[country], function(d){ return d; })
+	var maxY = d3.max(obj[country], function(d){ console.log(d);return d; })
+	console.log("min", minY)
+	console.log("max",maxY)
 	// scale-function for the y-axis
 	var yScale = d3.scale.linear()
-			   .domain([0, d3.max(obj[year], function(d){ return d[0]; }) ])
+			   .domain([0, maxY])
 			   .range([height - margin.left, 0]);
 
 	// draw the x-axis
@@ -133,7 +134,6 @@ function makeBarChart(obj, countryName, variableName, year = 0, country) {
 					  .scale(xScale)
 					  .orient("bottom")
 					  .ticks(variableName, function(d, i){ return i; } );
-
 				
 				svg.append("g")
 				   .attr("class", "x axis")
