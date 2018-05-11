@@ -5,7 +5,7 @@
 -	Assignment: D3 Linked views
 -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>D3 - Linked views</title>
 		<meta charset="utf-8">
@@ -14,7 +14,7 @@
 	    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 		<script src="datamaps.world.min.js"></script>
-	    <div id="container" style="position: relative; width: 800px; height: 600px;"></div>
+	    
 
 		<script src="https://d3js.org/d3-collection.v1.min.js"></script>
 	    <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
@@ -25,6 +25,15 @@
 		<script type="text/javascript" src="linkedviews.js"></script>
 	</head>
 	<body>
-		
+		<script type="text/javascript">
+			d3.select("body").append("p").html("<h1>Data Processing</h1><b>Marwa Ahmed, Student number: 10747141</b></br> ")
+		</script>
+
+		<b>Source: </b>
+		<a href = "https://stats.oecd.org/Index.aspx?DataSetCode=BLI">OECD ilibrary - Better Life Index</a> <a> & </a>
+		<a href = "https://www.numbeo.com/quality-of-life/rankings_by_country.jsp">Quality of Life Index</a></br></br>
+
+		<div id="container" style="position: relative; width: 700px; height: 400px;"></div>
+	</br>
 	</body>
 </html>

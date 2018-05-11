@@ -24,7 +24,7 @@ reader = csv.DictReader(csvfile, fieldnames)
 datalist = []
 
 # dictionary to store the list of dictionaries in
-data = {"data": datalist}
+data = {"data2015": datalist}
 
 # append each row as a dictionary to the list
 for row in reader:
