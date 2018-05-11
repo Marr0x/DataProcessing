@@ -34,8 +34,6 @@ function getData(){
 	d3.queue()
 	  .defer(d3.request, bli2015)
 	  .defer(d3.request, bli2016)
-	  .defer(d3.request, "QoLI2015.json")
-	  .defer(d3.request, "QoLI2016.json")
 	  .awaitAll(convertData);
 };
 
@@ -133,7 +131,8 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	var xAxis = d3.svg.axis()
 					  .scale(xScale)
 					  .orient("bottom")
-					  .ticks(variableName, function(d, i){ return i; } );
+					  .ticks(variableName.length)
+					  .tickFormat(variableName, function(d){ return d; } );
 				
 				svg.append("g")
 				   .attr("class", "x axis")
@@ -194,8 +193,6 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 
 };
-
-
 
 
 
