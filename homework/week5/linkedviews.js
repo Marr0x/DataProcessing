@@ -34,6 +34,8 @@ function getData(){
 	d3.queue()
 	  .defer(d3.request, bli2015)
 	  .defer(d3.request, bli2016)
+	  .defer(d3.request, "QoLI2015.json")
+	  .defer(d3.request, "QoLI2016.json")
 	  .awaitAll(convertData);
 };
 
@@ -75,7 +77,9 @@ function convertData(error, response, year = 0) {
 			infoCountry.push(info);
 		}
 		obj[country] = infoCountry
+		console.log(infoCountry)
 	}
+
 
 	console.log(obj)
 
@@ -86,7 +90,7 @@ function convertData(error, response, year = 0) {
 		variableName[i] = dataBLI.structure.dimensions.observation[1].values[i].name;
 	}
 
-	makeBarChart(infoCountry, countryName, variableName)
+	makeBarChart(obj, countryName, variableName)
 
 };
 
@@ -94,7 +98,7 @@ function convertData(error, response, year = 0) {
 /** 
 * Make bar chart.
 **/
-function makeBarChart(infoCountry, countryName, variableName, year = 0, country) {
+function makeBarChart(obj, countryName, variableName, year = 0, country) {
 
 	// set dimentions and margins of the graph
 	var margin = {top: 50, right: 100, bottom: 100, left: 50};
@@ -121,7 +125,7 @@ function makeBarChart(infoCountry, countryName, variableName, year = 0, country)
 
 	// scale-function for the y-axis
 	var yScale = d3.scale.linear()
-			   .domain([0, d3.max(infoCountry[year], function(d){ return d[0]; }) ])
+			   .domain([0, d3.max(obj[year], function(d){ return d[0]; }) ])
 			   .range([height - margin.left, 0]);
 
 	// draw the x-axis
@@ -151,7 +155,7 @@ function makeBarChart(infoCountry, countryName, variableName, year = 0, country)
 	// call the yAxis function to create the y-axis
 	svg.append("g")
 	   .attr("class", "y axis")
-	   .attr("transform", "translate(" + margin.left + ",0)")
+	   .attr("transform", "translate(" + margin.left + ",6)")
 	   .call(yAxis);
 
 
@@ -177,13 +181,13 @@ function makeBarChart(infoCountry, countryName, variableName, year = 0, country)
 
 	// bars 
 	var rectangles = svg.selectAll("rect")
-						.data(infoCountry)
+						.data(obj)
 						.enter()
 						.append("rect")
 						.attr("x", function(d, i){ return ((xScale(width + margin.left + margin.right)/5) * i)+ margin.left})
 						.attr("y", yScale(height - margin.bottom - margin.top))
 						.attr("width", 50 )
-						.attr("height", function (d) {return (d)} )
+						.attr("height", function (d) {console.log(d); return (d)} )
 						.attr("fill", "blue");
 						//.text(function (d, i) { console.log(d); return i});
 
