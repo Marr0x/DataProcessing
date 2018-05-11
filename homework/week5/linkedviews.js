@@ -6,7 +6,7 @@
 
 /*
 * Data sources:
-* Better Life Index: http://stats.oecd.org/Index.aspx?DataSetCode=BLI
+* Better Life Index: https://stats.oecd.org/Index.aspx?DataSetCode=BLI
 * Quality of Life Index 2015: https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2015
 * Quality of Life Index 2016: https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2016
 */
@@ -26,9 +26,9 @@ window.onload = function() {
 function getData(){
 
 	// API request bli = betterLifeIndex
-	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT+MN+WMN/all?&dimensionAtObservation=allDimensions";
+	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 	//var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT+MN+WMN/all?&dimensionAtObservation=allDimensions";
-	var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT+MN+WMN/all?&dimensionAtObservation=allDimensions";
+	var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 
 	// put data in a queue, so the plot will be made after everything is loaded
 	d3.queue()
@@ -51,7 +51,7 @@ function convertData(error, response, year = 0) {
 	// number of countries, variables, inequality (total, men, women)
 	var noCountries = dataBLI.structure.dimensions.observation[0].values.length;
 	var noVariables = dataBLI.structure.dimensions.observation[1].values.length;
-	var noInequality = dataBLI.structure.dimensions.observation[3].values.length;
+	// var noInequality = dataBLI.structure.dimensions.observation[3].values.length;
 
 
 	/**
@@ -59,38 +59,32 @@ function convertData(error, response, year = 0) {
 	* of each country. Put info of each county into separate 
 	* dictionaries (info), put all dicionaries in a list (infoCountry).
 	**/
-	var infoCountry = [];
+	var obj ={}
 	var countryName = [];
 	for (var country = 0; country < noCountries; country++){
 
 		// array of country names
 		countryName[country] = dataBLI.structure.dimensions.observation[0].values[country].name;
 
-		// value for total, men, women
-		var infoInequality = {};
-		for (var i = 0; i < noInequality; i ++){
-			
-			var info = {}
-			for (var variable = 0; variable < noVariables; variable++){
+		var infoCountry = [];
+		var info = {};
+		for (var variable = 0; variable < noVariables; variable++){
 
-				// get variables from each 'catogory' (total, men, women) from each country from the JSON 
-				info[variable] = (dataBLI.dataSets[0].observations[country + ":" + variable + ":0:" + i][0]);
-			}
-			infoInequality[i] = info;
-		} 
-		infoCountry.push(infoInequality);
-		console.log(infoInequality);
+			// get variables from each 'catogory' (total, men, women) from each country from the JSON 
+			info = (dataBLI.dataSets[0].observations[country + ":" + variable + ":0:0"][0]);
+			infoCountry.push(info);
+		}
+		obj[country] = infoCountry
 	}
 
-	console.log(countryName);
-	console.log(infoCountry);
+	console.log(obj)
+
 
 	// names of variables in the data 
 	var variableName = [];
 	for (var i = 0; i < noVariables; i++){
 		variableName[i] = dataBLI.structure.dimensions.observation[1].values[i].name;
 	}
-	console.log(variableName)
 
 	makeBarChart(infoCountry, countryName, variableName)
 
@@ -100,7 +94,7 @@ function convertData(error, response, year = 0) {
 /** 
 * Make bar chart.
 **/
-function makeBarChart(infoCountry, countryName, variableName, year = 0) {
+function makeBarChart(infoCountry, countryName, variableName, year = 0, country) {
 
 	// set dimentions and margins of the graph
 	var margin = {top: 50, right: 100, bottom: 100, left: 50};
@@ -179,6 +173,20 @@ function makeBarChart(infoCountry, countryName, variableName, year = 0) {
 	   .style("text-anchor", "middle")
 	   .style("font-size", "30px")
 	   .text("Better Life Index");
+
+
+	// bars 
+	var rectangles = svg.selectAll("rect")
+						.data(infoCountry)
+						.enter()
+						.append("rect")
+						.attr("x", function(d, i){ return ((xScale(width + margin.left + margin.right)/5) * i)+ margin.left})
+						.attr("y", yScale(height - margin.bottom - margin.top))
+						.attr("width", 50 )
+						.attr("height", function (d) {return (d)} )
+						.attr("fill", "blue");
+						//.text(function (d, i) { console.log(d); return i});
+
 
 
 };
