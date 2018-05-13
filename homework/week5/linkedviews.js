@@ -14,6 +14,7 @@
 
 window.onload = function() {
 	getData();
+	dataMaps();
 
 	var map = new Datamap({element: document.getElementById('container')});
 };
@@ -196,9 +197,26 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 
 
+function dataMaps(){
+	d3.queue()
+	.defer(d3.json, "QoLI2015.json")
+	.defer(d3.json, "QoLI2016.json")
+	.awaitAll(makeMap)
 
+// d3.json("QoLI2015.json", "QoLI2016.json", function(error, data){
+// 	if (error) throw error;
 
+// 	console.log(data)
+// });
 
+}
+
+function makeMap(error, data){
+	if (error) throw error;
+
+	console.log(data)
+
+}
 
 
 
