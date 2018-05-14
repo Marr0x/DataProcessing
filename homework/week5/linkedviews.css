@@ -7,3 +7,10 @@
 svg {
 	background-color: #efefef;
 }
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}

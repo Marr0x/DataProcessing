@@ -11,11 +11,11 @@ import json
 import csv
 
 # open the read file and the write file
-csvfile = open('QoLI2015.csv', 'r')
-jsonfile = open('QoLI2015.json', 'w')
+csvfile = open('QoLI2016.csv', 'r')
+jsonfile = open('QoLI2016.json', 'w')
 
 # columns in my csv data file
-fieldnames = ("Country", "Quality of Life Index")
+fieldnames = ("Landcode", "Country", "Quality of Life Index")
 
 # read data in dictionary form
 reader = csv.DictReader(csvfile, fieldnames)
@@ -24,7 +24,7 @@ reader = csv.DictReader(csvfile, fieldnames)
 datalist = []
 
 # dictionary to store the list of dictionaries in
-data = {"data2015": datalist}
+data = {"data2016": datalist}
 
 # append each row as a dictionary to the list
 for row in reader:

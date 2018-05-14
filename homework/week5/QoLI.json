@@ -1,0 +1,166 @@
+{ 
+	"data2015": {
+		"BEL": {
+			"country": "Belgium",
+			"qualityOfLifeIndex": 135.95
+		},
+		"CZE": {
+			"country": "Czech Republic",
+			"qualityOfLifeIndex": 127.53
+		},
+		"DNK": {
+			"country": "Denmark",
+			"qualityOfLifeIndex": 190.18
+		},
+		"FIN": {
+			"country": "Finland",
+			"qualityOfLifeIndex": 190.25
+		},
+		"FRA": {
+			"country": "France",
+			"qualityOfLifeIndex": 139.31
+		},	
+		"DEU": {
+			"country": "Germany",
+			"qualityOfLifeIndex": 195.94
+		},	
+		"GRC": {
+			"country": "Greece",
+			"qualityOfLifeIndex": 94.66
+		},	
+		"HUN": {
+			"country": "Hungary",
+			"qualityOfLifeIndex": 93.07
+		},
+		"IRL": {
+			"country": "Ireland",
+			"qualityOfLifeIndex": 148.85
+		},	
+		"ITA": {
+			"country": "Italy",
+			"qualityOfLifeIndex": 100.99
+		},	
+		"NLD": {
+			"country": "Netherlands",
+			"qualityOfLifeIndex": 166.76
+		},	
+		"NOR": {
+			"country": "Norway",
+			"qualityOfLifeIndex": 175.09
+		},
+		"POL": {
+			"country": "Poland",
+			"qualityOfLifeIndex": 109.74
+		},	
+		"PRT": {
+			"country": "Portugal",
+			"qualityOfLifeIndex": 129.16
+		},	
+		"ESP": {
+			"country": "Spain",
+			"qualityOfLifeIndex": 134.91
+		},	
+		"SWE": {
+			"country": "Sweden",
+			"qualityOfLifeIndex": 193.86
+		},	
+		"CHE": {
+			"country": "Switzerland",
+			"qualityOfLifeIndex": 222.94
+		},	
+		"TUR": {
+			"country": "Turkey",
+			"qualityOfLifeIndex": 82.55
+		},	
+		"GBR": {
+			"country": "United Kingdom",
+			"qualityOfLifeIndex": 156.90
+		},	
+		"SVN": {
+			"country": "Slovenia",
+			"qualityOfLifeIndex": 134.49
+		}	
+	},
+	"data2016": {
+		"BEL": {
+			"country": "Belgium",
+			"qualityOfLifeIndex": 162.29
+		},
+		"CZE": {
+			"country": "Czech Republic",
+			"qualityOfLifeIndex": 167.38
+		},
+		"DNK": {
+			"country": "Denmark",
+			"qualityOfLifeIndex": 206.49
+		},
+		"FIN": {
+			"country": "Finland",
+			"qualityOfLifeIndex": 184.01
+		},
+		"FRA": {
+			"country": "France",
+			"qualityOfLifeIndex": 173.56
+		},	
+		"DEU": {
+			"country": "Germany",
+			"qualityOfLifeIndex": 199.70
+		},	
+		"GRC": {
+			"country": "Greece",
+			"qualityOfLifeIndex": 165.43
+		},	
+		"HUN": {
+			"country": "Hungary",
+			"qualityOfLifeIndex": 140.74
+		},
+		"IRL": {
+			"country": "Ireland",
+			"qualityOfLifeIndex": 171.92
+		},	
+		"ITA": {
+			"country": "Italy",
+			"qualityOfLifeIndex": 159.28
+		},	
+		"NLD": {
+			"country": "Netherlands",
+			"qualityOfLifeIndex": 192.40
+		},	
+		"NOR": {
+			"country": "Norway",
+			"qualityOfLifeIndex": 188.90
+		},
+		"POL": {
+			"country": "Poland",
+			"qualityOfLifeIndex": 153.61
+		},	
+		"PRT": {
+			"country": "Portugal",
+			"qualityOfLifeIndex": 181.18
+		},	
+		"ESP": {
+			"country": "Spain",
+			"qualityOfLifeIndex": 186.41
+		},	
+		"SWE": {
+			"country": "Sweden",
+			"qualityOfLifeIndex": 185.81
+		},	
+		"CHE": {
+			"country": "Switzerland",
+			"qualityOfLifeIndex": 208.54
+		},	
+		"TUR": {
+			"country": "Turkey",
+			"qualityOfLifeIndex": 137.31
+		},	
+		"GBR": {
+			"country": "United Kingdom",
+			"qualityOfLifeIndex": 180.25
+		},	
+		"SVN": {
+			"country": "Slovenia",
+			"qualityOfLifeIndex": 175.93
+		}
+	}
+}

@@ -1,20 +1,21 @@
-Belgium,162.29
-Czech Republic,167.38
-Denmark,206.49
-Finland,184.01
-France,173.56
-Germany,199.70
-Greece,165.43
-Hungary,140.74
-Ireland,171.92
-Italy,159.28
-Netherlands,192.40
-Norway,188.90
-Poland,153.61
-Portugal,181.18
-Slovenia,175.93
-Spain,186.41
-Sweden,185.81
-Switzerland,208.54
-Turkey,137.31
-United Kingdom,180.25
+code,country,QoLI
+BEL,Belgium,162.29
+CZE,Czech Republic,167.38
+DNK,Denmark,206.49
+FIN,Finland,184.01
+FRA,France,173.56
+DEU,Germany,199.70
+GRC,Greece,165.43
+HUN,Hungary,140.74
+IRL,Ireland,171.92
+ITA,Italy,159.28
+NLD,Netherlands,192.40
+NOR,Norway,188.90
+POL,Poland,153.61
+PRT,Portugal,181.18
+ESP,Spain,186.41
+SWE,Sweden,185.81
+CHE,Switzerland,208.54
+TUR,Turkey,137.31
+GBR,United Kingdom,180.25
+SVN,Slovenia,175.93
