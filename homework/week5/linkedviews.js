@@ -18,7 +18,7 @@
 
 window.onload = function() {
 	dataBarchart();
-	dataMaps();
+	//dataMaps();
 
 };
 
@@ -33,11 +33,16 @@ function dataBarchart(){
 	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 	var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 
-	// put data in a queue, so the plot will be made after everything is loaded
+	// data bar chart: put data in a queue, so the plot will be made after everything is loaded
 	d3.queue()
 	  .defer(d3.request, bli2015)
 	  .defer(d3.request, bli2016)
 	  .awaitAll(convertData);
+
+	// data map
+	d3.queue()
+	.defer(d3.json, "QoLI.json")
+	.awaitAll(makeMap)
 };
 
 
@@ -172,7 +177,7 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	// title graph
 	svg.append("text")
 	   .attr("class", "title")
-	   .attr("y", -margin.top/2)
+	   .attr("y", -margin.top/3)
 	   .attr("x", width/2)
 	   .style("text-anchor", "middle")
 	   .style("font-size", "30px")
@@ -180,7 +185,6 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 	// make bars 
 	var padding = 20;
-	console.log(svg);
 	var rectangles = svg.selectAll("rect")
 						.data(obj[country])
 						.enter()
@@ -197,20 +201,18 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	* This function updates the bar chart when clicked on a country.
 	**/
 	function updateBarChart(name){
-		console.log(name);
-		console.log(countryName);
 
 		// search for the number of the country in the BetterLifeIndex data
-		var n;
+		var country;
 		countryName.forEach(function(d,i){
 			if (d == name){
-				n = i;
+				country = i;
 			};
 		});
 
 		// update bar chart
 		var rectangles = svg.selectAll("rect")
-							.data(obj[n])
+							.data(obj[country])
 							.transition()
 							.duration(500)
 							.attr("x", function(d,i) {
@@ -229,30 +231,26 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 /**
 * Data for maps 
 **/
-function dataMaps(){
-	d3.queue()
-	.defer(d3.json, "QoLI.json")
-	.awaitAll(makeMap)
+// function dataMaps(){
+// 	d3.queue()
+// 	.defer(d3.json, "QoLI.json")
+// 	.awaitAll(makeMap)
 
-};
+// };
 
 
 /**
 * This function makes the map after data is loaded.
 **/
-function makeMap(error, data){
+function makeMap(error, data, datasetYear = data[0].data2015){
 	if (error) throw error;
 
 	console.log(data[0])
-	
-	// 
-	var dataset2015 = data[0].data2015;
-	var dataset2016 = data[0].data2016;
 
 	// iterate through JSON and put all the qualityOfLifeIndex values in an array
 	var onlyValues = [];
-	Object.keys(dataset2015).forEach(function(key, i){
-		onlyValues[i] = dataset2015[key].fillColor = (dataset2015[key].qualityOfLifeIndex);
+	Object.keys(datasetYear).forEach(function(key, i){
+		onlyValues[i] = datasetYear[key].fillColor = (datasetYear[key].qualityOfLifeIndex);
 
 	})
 
@@ -266,8 +264,8 @@ function makeMap(error, data){
         .range(["#f8f9c5","#0a8423"]);
 
     // color the counties on the map, based on the qualityOfLifeIndex
-	Object.keys(dataset2015).forEach(function(key){
-		dataset2015[key].fillColor = paletteScale(dataset2015[key].qualityOfLifeIndex);
+	Object.keys(datasetYear).forEach(function(key){
+		datasetYear[key].fillColor = paletteScale(datasetYear[key].qualityOfLifeIndex);
 	})
 
 	// make map
@@ -277,41 +275,43 @@ function makeMap(error, data){
 			defaultFill: 'rgba(0,0,0,0.1)'
 		},
 		scope: 'world',
-		data: dataset2015,
+		data: datasetYear,
 	
-	done: function(datamap) {
-		datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
-			console.log(geography.properties.name);
-			update(geography.properties.name);
-		});
-	},
+		// when user clicks on a country send name of country to the update function, to update the bar chart
+		done: function(datamap) {
+			datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
+				update(geography.properties.name);
+			});
+		},
 
-	setProjection: function(element) {
-		var projection = d3.geo.equirectangular()
-							   .center([13, 53])
-							   .rotate([4.4, 0])
-							   .scale(600)
-							   .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-		var path = d3.geo.path()
-						 .projection(projection);
+		// zoom in on Europe
+		setProjection: function(element) {
+			var projection = d3.geo.equirectangular()
+								   .center([13, 53])
+								   .rotate([4.4, 0])
+								   .scale(600)
+								   .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+			var path = d3.geo.path()
+							 .projection(projection);
 
-	return {path: path, projection: projection};
-  	},
-	
-	geographyConfig: {
-		borderColor: "white",
-		popupOnHover: true,
-		highlightOnHover: true,
-		highlightFillColor: "lightgreen",
+		return {path: path, projection: projection};
+	  	},
+		
+		// change color of the borders when hovering over country
+		geographyConfig: {
+			borderColor: "gray",
+			popupOnHover: true,
+			highlightOnHover: true,
+			highlightBorderColor: "black",
+			highlightFillColor: "datasetYear[key].fillColor",
 
-
+		// show tooltip when hovering over country
 		popupTemplate: function(geo, data){
 			return ['<div class="hoverinfo"><strong>',
 			'Country: </strong>'+ geo.properties.name, '</br>' + 
 			'<strong>Quality of Life Index: </strong>', data.qualityOfLifeIndex + '</div>'].join('');
 		}
-	}
-
+		}
 
 	});
 

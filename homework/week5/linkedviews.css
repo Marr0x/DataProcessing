@@ -5,10 +5,19 @@
 * Assignment: D3 Linked views
 **/
 
-svg {
-	background-color: #efefef;
+/* background color of map */
+#containerMap {
+		background-color: lightCyan;
 }
 
+
+/* border color */
+svg {
+	border: 1px solid lightgrey;
+}
+
+
+/* style the x and y axis of the bar chart */
 .axis path,
 .axis line {
 	fill: none;

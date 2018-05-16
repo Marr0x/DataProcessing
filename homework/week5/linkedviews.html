@@ -9,34 +9,60 @@
 	<head>
 		<title>D3 - Linked views</title>
 		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		
+		<!-- style sheet -->
 		<link rel="stylesheet" type="text/css" href="linkedviews.css">
 
+		<!-- load d3v3 and world map -->
 	    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 		<script src="datamaps.world.min.js"></script>
 	    
-
+		<!-- d3 libraries -->
 		<script src="https://d3js.org/d3-collection.v1.min.js"></script>
 	    <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
 	    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
 	    <script src="https://d3js.org/d3-request.v1.min.js"></script>
 	    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
 
+		<!-- make button: https://getbootstrap.com/docs/4.0/getting-started/introduction/ -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<!-- Bootstrap, Source: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_default&stacked=h -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 		<script type="text/javascript" src="linkedviews.js"></script>
 		<!-- <script type="text/javascript" src="map.js"></script> -->
+
 	</head>
 	<body>
-		<script type="text/javascript">
-			d3.select("body").append("p").html("<h1>Data Processing</h1><b>Marwa Ahmed, Student number: 10747141</b></br>")
-		</script>
-
-		<b>Source: </b>
-		<a href = "https://stats.oecd.org/Index.aspx?DataSetCode=BLI">OECD ilibrary - Better Life Index</a> <a> & </a>
-		<a href = "https://www.numbeo.com/quality-of-life/rankings_by_country.jsp">Quality of Life Index</a></br></br>
+		
+		<div class="jumbotron text-center">
+			<h2>Data Processing - D3 Linked views</h2>
+			<p>Marwa Ahmed (10747141)</p> 
+			<b>Source data: </b>
+			<a href = "https://stats.oecd.org/Index.aspx?DataSetCode=BLI">OECD ilibrary - Better Life Index</a> <a> & </a>
+			<a href = "https://www.numbeo.com/quality-of-life/rankings_by_country.jsp">Quality of Life Index</a>
+		</div>
 
 		<div id="containerMap" style="position: relative; width: 700px; height: 400px;"></div>
 		</br>
 		<div id="containerBar" style="position: relative; width: 700px; height: 400px;"></div>
+
+<!-- 		<div class="dropdown show">
+			<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Year</a>
+
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+				<a class="dropdown-item" onclick="update('data[0].data2015')">2015</a>
+				<a class="dropdown-item" onclick="update('data[0].data2016')">2016</a>
+			</div> -->
+		</div>
 	</br>
 	</body>
 </html>
