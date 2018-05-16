@@ -4,7 +4,7 @@
 * Assignment: D3 Linked views
 **/
 
-/*
+/**
 * Data sources:
 * Better Life Index: https://stats.oecd.org/Index.aspx?DataSetCode=BLI
 * Quality of Life Index 2015: https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2015
@@ -13,7 +13,7 @@
 * Web siteds Used:
 * https://github.com/markmarkoh/datamaps/blob/master/README.md#getting-started
 * http://bl.ocks.org/markmarkoh/4127667
-*/
+**/
 
 
 window.onload = function() {
@@ -31,7 +31,6 @@ function dataBarchart(){
 
 	// API request bli = betterLifeIndex
 	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
-	//var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT+MN+WMN/all?&dimensionAtObservation=allDimensions";
 	var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 
 	// put data in a queue, so the plot will be made after everything is loaded
@@ -90,7 +89,6 @@ function convertData(error, response, year = 0) {
 	}
 
 	makeBarChart(obj, countryName, variableName)
-
 };
 
 
@@ -118,9 +116,10 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						 .domain(variableName)
 						 .rangeBands([margin.left, width]);
 
-
+	// min and max values of countries
 	var minY = d3.min(obj[country], function(d){ return d; })
 	var maxY = d3.max(obj[country], function(d){ return d; })
+console.log(obj)
 
 	// scale-function for the y-axis
 	var yScale = d3.scale.linear()
@@ -182,29 +181,26 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	   .style("font-size", "30px")
 	   .text("Better Life Index");
 
-	// bars 
-
+	// make bars 
 	var padding = 20;
-
 	var rectangles = svg.selectAll("rect")
 						.data(obj[country])
 						.enter()
 						.append("rect")
 						.attr("x", function(d,i) {
 							return xScale(variableName[i]);})
-						.attr("y", function (d, i) { return yScale(d); })
+						.attr("y", function (d, i) { return yScale(d) - 1; })
 						.attr("width", (width / variableName.length) - padding) // width / aantal bars
 						.attr("height", function (d) {return height - margin.bottom - yScale(d); })
-						.attr("fill", "blue");
-
+						.attr("fill", "lightgreen");
 
 };
 
 
-/*
+
+/**
 * Data for maps 
-* 
-*/
+**/
 function dataMaps(){
 	d3.queue()
 	.defer(d3.json, "QoLI.json")
@@ -212,25 +208,43 @@ function dataMaps(){
 
 };
 
+
+/**
+* This function makes the map after data is loaded.
+**/
 function makeMap(error, data){
 	if (error) throw error;
 
 	console.log(data[0])
-	console.log(data[0].data2016.BEL.qualityOfLifeIndex)
 	
+	// 
 	var dataset2015 = data[0].data2015;
+	var dataset2016 = data[0].data2016;
 
-	console.log(dataset2015.BEL.qualityOfLifeIndex)
+	// iterate through JSON and put all the qualityOfLifeIndex values in an array
+	var onlyValues = [];
+	Object.keys(dataset2015).forEach(function(key, i){
+		onlyValues[i] = dataset2015[key].fillColor = (dataset2015[key].qualityOfLifeIndex);
 
-	// var onlyValues = dataset2015.map(function(d, i){ return dataset2015[i].qualityOfLifeIndex; });
-	// var minValue = Math.min.apply(null, onlyValues),
- //        maxValue = Math.max.apply(null, onlyValues);
+	})
 
-	// var paletteScale = d3.scale.linear()
- //            .domain([minValue,maxValue])
- //            .range(["#EFEFFF","#02386F"]);
+	// get the min and max values
+	var minValue = Math.min.apply(null, onlyValues);
+    var maxValue = Math.max.apply(null, onlyValues);
 
+    // make a color scale, to color the map
+	var paletteScale = d3.scale.linear()
+        .domain([minValue,maxValue])
+        .range(["#f8f9c5","#0a8423"]);
 
+    // color the counties on the map, based on the qualityOfLifeIndex
+	Object.keys(dataset2015).forEach(function(key){
+		// console.log(dataset2015[key]);
+		dataset2015[key].fillColor = paletteScale(dataset2015[key].qualityOfLifeIndex);
+		// console.log(dataset2015[key]);
+	})
+
+	// make map
 	var map = new Datamap({
 		element: document.getElementById('container'),
 		fills: {
@@ -239,6 +253,13 @@ function makeMap(error, data){
 		scope: 'world',
 		data: dataset2015,
 	
+	done: function(datamap) {
+		datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
+			console.log(geography.properties.name);
+			updateBarChart(geography.properties.name);
+		});
+	},
+
 	setProjection: function(element) {
 		var projection = d3.geo.equirectangular()
 							   .center([13, 53])
@@ -255,7 +276,7 @@ function makeMap(error, data){
 		borderColor: "white",
 		popupOnHover: true,
 		highlightOnHover: true,
-		highlightFillColor: "darkgreen",
+		highlightFillColor: "lightgreen",
 
 
 		popupTemplate: function(geo, data){
@@ -271,6 +292,14 @@ function makeMap(error, data){
 };
 
 
+/**
+* This function updates the bar chart when clicked on a country.
+**/
+function updateBarChart(country){
+
+
+
+};
 
 
 
