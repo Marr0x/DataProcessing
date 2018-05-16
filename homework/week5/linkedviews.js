@@ -51,10 +51,9 @@ function convertData(error, response, year = 0) {
 	// convert data to JSON
 	var dataBLI = JSON.parse(response[year].responseText)
 
-	// number of countries, variables, inequality (total, men, women)
+	// number of countries and variables
 	var noCountries = dataBLI.structure.dimensions.observation[0].values.length;
 	var noVariables = dataBLI.structure.dimensions.observation[1].values.length;
-	// var noInequality = dataBLI.structure.dimensions.observation[3].values.length;
 
 
 	/**
@@ -78,7 +77,6 @@ function convertData(error, response, year = 0) {
 			infoCountry.push(info);
 		}
 		obj[country] = infoCountry
-		// console.log(infoCountry)
 	}
 	console.log(obj)
 
@@ -91,9 +89,11 @@ function convertData(error, response, year = 0) {
 	makeBarChart(obj, countryName, variableName)
 };
 
+// variable to update the bar chart
+var update;
 
 /** 
-* Make bar chart.
+* This function makes a bar chart and contains an update function to update the bar chart.
 **/
 function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
@@ -103,7 +103,7 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	var height = 500 - margin.top - margin.bottom/2;
 
 	// create SVG element
-	var svg = d3.select("body")
+	var svg = d3.select("#containerBar")
 				.append("svg")
 				.attr("class", "svg")
 				.attr("width", width + margin.left + margin.right)
@@ -119,12 +119,11 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	// min and max values of countries
 	var minY = d3.min(obj[country], function(d){ return d; })
 	var maxY = d3.max(obj[country], function(d){ return d; })
-console.log(obj)
 
 	// scale-function for the y-axis
 	var yScale = d3.scale.linear()
-			   .domain([0, maxY])
-			   .range([height - margin.bottom, margin.top]).nice();
+						 .domain([0, maxY])
+						 .range([height - margin.bottom, margin.top]).nice();
 
 	// draw the x-axis
 	var xAxis = d3.svg.axis()
@@ -161,7 +160,6 @@ console.log(obj)
 	   .attr("transform", "translate(" + margin.left + ",0)")
 	   .call(yAxis);
 
-
 	// text label for the y-axis
 	svg.append("text")
 	   .attr("transform", "rotate(-90)")
@@ -170,7 +168,6 @@ console.log(obj)
 	   .attr("dy", "1em")
 	   .style("text-anchor", "middle")
 	   .text("Percentage of the population (%)");
-
 
 	// title graph
 	svg.append("text")
@@ -183,6 +180,7 @@ console.log(obj)
 
 	// make bars 
 	var padding = 20;
+	console.log(svg);
 	var rectangles = svg.selectAll("rect")
 						.data(obj[country])
 						.enter()
@@ -190,12 +188,42 @@ console.log(obj)
 						.attr("x", function(d,i) {
 							return xScale(variableName[i]);})
 						.attr("y", function (d, i) { return yScale(d) - 1; })
-						.attr("width", (width / variableName.length) - padding) // width / aantal bars
+						.attr("width", (width / variableName.length) - padding)
 						.attr("height", function (d) {return height - margin.bottom - yScale(d); })
-						.attr("fill", "lightgreen");
+						.attr("fill", "green");
+
+
+	/**
+	* This function updates the bar chart when clicked on a country.
+	**/
+	function updateBarChart(name){
+		console.log(name);
+		console.log(countryName);
+
+		// search for the number of the country in the BetterLifeIndex data
+		var n;
+		countryName.forEach(function(d,i){
+			if (d == name){
+				n = i;
+			};
+		});
+
+		// update bar chart
+		var rectangles = svg.selectAll("rect")
+							.data(obj[n])
+							.transition()
+							.duration(500)
+							.attr("x", function(d,i) {
+								return xScale(variableName[i]);})
+							.attr("y", function (d, i) { return yScale(d) - 1; })
+							.attr("width", (width / variableName.length) - padding)
+							.attr("height", function (d) {return height - margin.bottom - yScale(d); })
+							.attr("fill", "green");	
+	};
+
+	update = updateBarChart;
 
 };
-
 
 
 /**
@@ -239,14 +267,12 @@ function makeMap(error, data){
 
     // color the counties on the map, based on the qualityOfLifeIndex
 	Object.keys(dataset2015).forEach(function(key){
-		// console.log(dataset2015[key]);
 		dataset2015[key].fillColor = paletteScale(dataset2015[key].qualityOfLifeIndex);
-		// console.log(dataset2015[key]);
 	})
 
 	// make map
 	var map = new Datamap({
-		element: document.getElementById('container'),
+		element: document.getElementById('containerMap'),
 		fills: {
 			defaultFill: 'rgba(0,0,0,0.1)'
 		},
@@ -256,7 +282,7 @@ function makeMap(error, data){
 	done: function(datamap) {
 		datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
 			console.log(geography.properties.name);
-			updateBarChart(geography.properties.name);
+			update(geography.properties.name);
 		});
 	},
 
@@ -290,21 +316,6 @@ function makeMap(error, data){
 	});
 
 };
-
-
-/**
-* This function updates the bar chart when clicked on a country.
-**/
-function updateBarChart(country){
-
-
-
-};
-
-
-
-
-
 
 
 
