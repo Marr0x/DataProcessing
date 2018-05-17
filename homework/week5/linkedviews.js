@@ -268,7 +268,12 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 		// when user clicks on a country send name of country to the update function, to update the bar chart
 		done: function(datamap) {
 			datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
-				update(geography.properties.name);
+				// if (datasetYear[geography.properties.name] == null){
+				// 	console.log("no data")
+				// }
+				// else{
+					update(geography.properties.name);
+				// }
 			});
 		},
 
