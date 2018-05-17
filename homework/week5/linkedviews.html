@@ -31,18 +31,17 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-		<!-- Bootstrap, Source: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_default&stacked=h -->
+		<!-- Bootstrap, source: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_default&stacked=h -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+		
+		<!-- JavaScript file -->
 		<script type="text/javascript" src="linkedviews.js"></script>
-		<!-- <script type="text/javascript" src="map.js"></script> -->
-
 	</head>
 	<body>
-
+		
 		<div class="jumbotron text-center">
 			<h2>Data Processing - D3 Linked views</h2>
 			<p>Marwa Ahmed (10747141)</p> 
@@ -51,21 +50,32 @@
 			<a href = "https://www.numbeo.com/quality-of-life/rankings_by_country.jsp">Quality of Life Index</a>
 		</div>
  	
- 	<div class="col-sm-6">
-		<div id="containerMap" style="position: relative; width: 700px; height: 500px; margin: auto;"></div>
-		</br>
-	</div>
- 	<div class="col-sm-6">
-		<div id="containerBar" style="position: relative; width: 700px; height: 500px; margin: auto;"></div>
-	</div>
-
-<!-- 		<div class="dropdown show">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Year</a>
+<!--  		<div class="dropdown show" style="position: relative; margin: auto">
+			<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position: relative; margin: auto">Choose Year</a>
 
 			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 				<a class="dropdown-item" onclick="update('data[0].data2015')">2015</a>
 				<a class="dropdown-item" onclick="update('data[0].data2016')">2016</a>
-			</div> -->
+		</div> -->
+
+ 		<!-- div for map -->
+	 	<div class="col-sm-6">
+			<div id="containerMap" style="position: relative; width: 700px; height: 500px; margin: auto;"></div>	
+			
+			<div id="legend">
+				<div class="legend-title">Legend</div>
+			</div>
+			
+			</br>
+		</div>
+
+		<!-- div for bar chart -->
+	 	<div class="col-sm-6">
+			<div id="containerBar" style="position: relative; width: 700px; height: 500px; margin: auto;"></div>
+		</div>
+
+
+
 		</div>
 	</br>
 	</body>

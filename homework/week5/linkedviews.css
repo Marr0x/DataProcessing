@@ -8,12 +8,14 @@
 /* background color of map */
 #containerMap {
 		background-color: lightCyan;
+		box-shadow: 0 0 20px #ccc;
 }
 
 
 /* border color */
 svg {
 	border: 1px solid lightgrey;
+	/*box-shadow: 0 0 20px #ccc;*/
 }
 
 
@@ -23,4 +25,33 @@ svg {
 	fill: none;
 	stroke: black;
 	shape-rendering: crispEdges;
+}
+
+/* legend for color countries on map */
+#legend {
+      position: absolute;
+      left: 20px;
+      top: 10px;
+    }
+
+#legend .legend-title {
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+#legend .legend-item {
+  margin-bottom: 4px;
+  font-size: .8em;
+}
+
+#legend .legend-swatch,
+#legend .legend-value {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+#legend .legend-swatch {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
 }

@@ -10,35 +10,39 @@
 * Quality of Life Index 2015: https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2015
 * Quality of Life Index 2016: https://www.numbeo.com/quality-of-life/rankings_by_country.jsp?title=2016
 *
-* Web siteds Used:
+* Some of the used websites:
 * https://github.com/markmarkoh/datamaps/blob/master/README.md#getting-started
 * http://bl.ocks.org/markmarkoh/4127667
 **/
 
 
+/**
+* Call main function when whole code is loaded.
+**/
 window.onload = function() {
 	loadData();
-
 };
 
 
 /**
-* This function gets the data from an API request and places it in a queue. 
-* When all data is loaded it calls the function convertData.
+* This function gets the Better Life Index data from API requests and places this data in a queue, 
+* and the Quality of Life Index data from a JSON file and places this data in another queue.
+* When all data is loaded, the function convertData (for the bar chart) and makeMap are called,
+* to make the bar chart and the map.
 **/
 function loadData(){
 
-	// API request bli = betterLifeIndex
+	// API request (bli = Better Life Index)
 	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 	var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 
-	// data bar chart: put data in a queue, so the plot will be made after everything is loaded
+	// data for bar chart; put data in a queue, so the plot will be made after everything is loaded
 	d3.queue()
 	  .defer(d3.request, bli2015)
 	  .defer(d3.request, bli2016)
 	  .awaitAll(convertData);
 
-	// data map
+	// data for map
 	d3.queue()
 	.defer(d3.json, "QoLI.json")
 	.awaitAll(makeMap)
@@ -46,7 +50,7 @@ function loadData(){
 
 
 /**
-* This function converts the data from the API request into a JSON, 
+* This function converts the data from the API requests into a JSON, 
 * then extracts all needed data from the JSON.
 **/ 
 function convertData(error, response, year = 0) {
@@ -66,6 +70,7 @@ function convertData(error, response, year = 0) {
 	* dictionaries (info), put all dicionaries in a list (infoCountry).
 	**/
 	var obj ={}
+	
 	var countryName = [];
 	for (var country = 0; country < noCountries; country++){
 
@@ -76,28 +81,30 @@ function convertData(error, response, year = 0) {
 		var info = {};
 		for (var variable = 0; variable < noVariables; variable++){
 
-			// get variables from each 'catogory' (total, men, women) from each country from the JSON 
+			// get variables from each country from the JSON 
 			info = (dataBLI.dataSets[0].observations[country + ":" + variable + ":0:0"][0]);
 			infoCountry.push(info);
 		}
 		obj[country] = infoCountry
 	}
-	console.log(obj)
 
-	// names of variables in the data 
+	// names of the variables are extracted from the data and put in an array
 	var variableName = [];
 	for (var i = 0; i < noVariables; i++){
 		variableName[i] = dataBLI.structure.dimensions.observation[1].values[i].name;
 	}
 
+	// all the needed extracted data is passed to the next function to make the bar charts
 	makeBarChart(obj, countryName, variableName)
 };
 
-// variable to update the bar chart
+
+// global variable to reach the update function of the bar chart
 var update;
 
+
 /** 
-* This function makes a bar chart and contains an update function to update the bar chart.
+* This function makes a bar chart and contains a function to update the bar chart.
 **/
 function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
@@ -105,6 +112,7 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	var margin = {top: 50, right: 100, bottom: 100, left: 50};
 	var width = 700 - margin.left - margin.right;
 	var height = 500 - margin.top - margin.bottom/2;
+
 
 	// create SVG element
 	var svg = d3.select("#containerBar")
@@ -120,7 +128,7 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						 .domain(variableName)
 						 .rangeBands([margin.left, width]);
 
-	// min and max values of countries
+	// min and max values of data; domain for yScale
 	var minY = d3.min(obj[country], function(d){ return d; })
 	var maxY = d3.max(obj[country], function(d){ return d; })
 
@@ -129,11 +137,12 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						 .domain([0, maxY])
 						 .range([height - margin.bottom, margin.top]).nice();
 
-	// draw the x-axis
+	// make function to define x-axis
 	var xAxis = d3.svg.axis()
 					  .scale(xScale)
 					  .orient("bottom");
-				
+	
+	// draw the x-axis			
 	svg.append("g")
 	   .attr("class", "axis")
 	   .attr("transform", "translate(0," + (height - margin.bottom) + ")")
@@ -189,7 +198,7 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						.enter()
 						.append("rect")
 						.attr("x", function(d,i) {
-							return xScale(variableName[i]);})
+							return xScale(variableName[i]) + 0.5;})
 						.attr("y", function (d, i) { return yScale(d) - 1; })
 						.attr("width", (width / variableName.length) - padding)
 						.attr("height", function (d) {return height - margin.bottom - yScale(d); })
@@ -197,11 +206,11 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 
 	/**
-	* This function updates the bar chart when clicked on a country.
+	* This function updates the bar chart when user clicks on a country.
 	**/
 	function updateBarChart(name){
 
-		// search for the number of the country in the BetterLifeIndex data
+		// search for (the number of) the country in the BetterLifeIndex data
 		var country;
 		countryName.forEach(function(d,i){
 			if (d == name){
@@ -234,8 +243,8 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 	};
 
+	// make a global function of the updateBarChart function
 	update = updateBarChart;
-
 };
 
 
@@ -247,14 +256,14 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 
 	console.log(data[0])
 
-	// iterate through JSON and put all the qualityOfLifeIndex values in an array
+	// iterate over the JSON and put all the qualityOfLifeIndex values in an array
 	var onlyValues = [];
 	Object.keys(datasetYear).forEach(function(key, i){
 		onlyValues[i] = datasetYear[key].fillColor = (datasetYear[key].qualityOfLifeIndex);
 
 	})
 
-	// get the min and max values
+	// get the min and max qualityOfLifeIndex values
 	var minValue = Math.min.apply(null, onlyValues);
     var maxValue = Math.max.apply(null, onlyValues);
 
@@ -263,7 +272,7 @@ function makeMap(error, data, datasetYear = data[0].data2015){
         .domain([minValue,maxValue])
         .range(["#f8f9c5","#0a8423"]);
 
-    // color the counties on the map, based on the qualityOfLifeIndex
+    // color the counties on the map, based on the qualityOfLifeIndex values
 	Object.keys(datasetYear).forEach(function(key){
 		datasetYear[key].fillColor = paletteScale(datasetYear[key].qualityOfLifeIndex);
 	})
@@ -271,21 +280,17 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 	// make map
 	var map = new Datamap({
 		element: document.getElementById('containerMap'),
+		// countries which are not in the dataset will be colored gray
 		fills: {
 			defaultFill: 'rgba(0,0,0,0.1)'
 		},
 		scope: 'world',
 		data: datasetYear,
 	
-		// when user clicks on a country send name of country to the update function, to update the bar chart
+		// when user clicks on a country, send name of country to the update function, to update the bar chart
 		done: function(datamap) {
 			datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
-				// if (datasetYear[geography.properties.name] == null){
-				// 	console.log("no data")
-				// }
-				// else{
-					update(geography.properties.name);
-				// }
+				update(geography.properties.name);
 			});
 		},
 
@@ -296,13 +301,14 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 								   .rotate([4.4, 0])
 								   .scale(600)
 								   .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+			
 			var path = d3.geo.path()
 							 .projection(projection);
 
 		return {path: path, projection: projection};
 	  	},
 		
-		// change color of the borders when hovering over country
+		// change color of the borders when hovering over country (fill color stays the same)
 		geographyConfig: {
 			borderColor: "gray",
 			popupOnHover: true,
@@ -310,24 +316,61 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 			highlightBorderColor: "black",
 			highlightFillColor: "datasetYear[key].fillColor",
 
-			// show tooltip when hovering over country
+			// show tooltip with name and qualityOfLifeIndex when hovering over country
 			popupTemplate: function(geo, data){
 				return ['<div class="hoverinfo"><strong>',
 				'Country: </strong>'+ geo.properties.name, '</br>' + 
 				'<strong>Quality of Life Index: </strong>', data.qualityOfLifeIndex + '</div>'].join('');
 			}
-
 		}
-
 	});
 
-	var legend_params = {
-	  legendTitle: "Legenda",
-	};
-	map.legend(legend_params);
 
+	// make a legend for the colors on the map
+
+	// var legend_params = {
+	//   legendTitle: "Legenda",
+	// };
+	// map.legend(legend_params);
+
+	values = [minValue, maxValue]
+	colors = ["#f8f9c5","#0a8423"]
+
+
+	colorLegend = [JSON.parse('{"values":"low Quality of Life Index", "color":"#f8f9c5"}'), 
+	JSON.parse('{"values":"high Quality of Life Index", "color":"#0a8423"}')]
+
+	// draw legend
+	var svg = d3.select("#legend")
+	var legend = svg.selectAll(".legend")
+					.data(colorLegend)
+					.enter().append("g")
+					.attr("class", "legend")
+					.attr("transform", function(d, i) { 
+						return "translate(0," + i * 15 + ")"; 
+					});
+
+	// draw legend colored rectangles
+	legend.append("rect")
+		  .attr("x", 15)
+		  .attr("y", 15)
+		  .attr("width", 10)
+		  .attr("height", 10)
+		  .style("fill", function(d, i){ 
+				return colorLegend[i].color;
+		  });
+
+	// draw legend text
+	legend.append("text")
+		  .attr("x", 15)
+		  // text 5px lower the position of rect
+		  .attr("y", 5)
+		  .attr("dy", ".400em")
+		  .style("text-anchor", "begin")
+		  .text(function(d, i) { 
+		  		return colorLegend[i].values;
+		  });
 };
-
 
 
 
