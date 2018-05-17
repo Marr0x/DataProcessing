@@ -180,7 +180,16 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	   .attr("x", width/2)
 	   .style("text-anchor", "middle")
 	   .style("font-size", "30px")
-	   .text("Better Life Index");
+	   .text("Better Life Index: " + countryName[0]);
+
+	// // put name of country above the bar chart
+	// svg.append("text")
+	//    .attr("class", "namecountry")
+	//    .attr("y", -margin.top/3)
+	//    .attr("x", margin.left)
+	//    .style("text-anchor", "middle")
+	//    .style("font-size", "30px")
+	//    .text(countryName[0]);
 
 	// make bars 
 	var padding = 20;
@@ -219,7 +228,30 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 							.attr("y", function (d, i) { return yScale(d) - 1; })
 							.attr("width", (width / variableName.length) - padding)
 							.attr("height", function (d) {return height - margin.bottom - yScale(d); })
-							.attr("fill", "green");	
+							.attr("fill", "green");
+
+	// title graph
+	svg.select(".title")
+	   .transition()
+	   .duration(1000)
+	   .attr("class", "title")
+	   .attr("y", -margin.top/3)
+	   .attr("x", width/2)
+	   .style("text-anchor", "middle")
+	   .style("font-size", "30px")
+	   .text("Better Life Index: " + name);
+
+
+		// // update name of country above the bar chart
+		// svg.select(".namecountry")
+		//    .attr("class", "namecountry")
+		//    .attr("y", -margin.top/3)
+		//    .attr("x", margin.left)
+		//    .style("text-anchor", "middle")
+		//    .style("font-size", "30px")
+		//    .text(name);
+
+
 	};
 
 	update = updateBarChart;
@@ -298,15 +330,21 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 			highlightBorderColor: "black",
 			highlightFillColor: "datasetYear[key].fillColor",
 
-		// show tooltip when hovering over country
-		popupTemplate: function(geo, data){
-			return ['<div class="hoverinfo"><strong>',
-			'Country: </strong>'+ geo.properties.name, '</br>' + 
-			'<strong>Quality of Life Index: </strong>', data.qualityOfLifeIndex + '</div>'].join('');
-		}
+			// show tooltip when hovering over country
+			popupTemplate: function(geo, data){
+				return ['<div class="hoverinfo"><strong>',
+				'Country: </strong>'+ geo.properties.name, '</br>' + 
+				'<strong>Quality of Life Index: </strong>', data.qualityOfLifeIndex + '</div>'].join('');
+			}
+
 		}
 
 	});
+
+	var legend_params = {
+	  legendTitle: "Legenda",
+	};
+	map.legend(legend_params);
 
 };
 
