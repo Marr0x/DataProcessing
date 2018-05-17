@@ -17,8 +17,7 @@
 
 
 window.onload = function() {
-	dataBarchart();
-	//dataMaps();
+	loadData();
 
 };
 
@@ -27,7 +26,7 @@ window.onload = function() {
 * This function gets the data from an API request and places it in a queue. 
 * When all data is loaded it calls the function convertData.
 **/
-function dataBarchart(){
+function loadData(){
 
 	// API request bli = betterLifeIndex
 	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
@@ -226,17 +225,6 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	update = updateBarChart;
 
 };
-
-
-/**
-* Data for maps 
-**/
-// function dataMaps(){
-// 	d3.queue()
-// 	.defer(d3.json, "QoLI.json")
-// 	.awaitAll(makeMap)
-
-// };
 
 
 /**
