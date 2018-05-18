@@ -2,165 +2,205 @@
 	"data2015": {
 		"BEL": {
 			"country": "Belgium",
-			"qualityOfLifeIndex": 135.95
+			"qualityOfLifeIndex": 135.95,
+			"purchasingPowerIndex": 86.16
 		},
 		"CZE": {
 			"country": "Czech Republic",
-			"qualityOfLifeIndex": 127.53
+			"qualityOfLifeIndex": 127.53,
+			"purchasingPowerIndex": 68.07
 		},
 		"DNK": {
 			"country": "Denmark",
-			"qualityOfLifeIndex": 190.18
+			"qualityOfLifeIndex": 190.18,
+			"purchasingPowerIndex": 105.70
 		},
 		"FIN": {
 			"country": "Finland",
-			"qualityOfLifeIndex": 190.25
+			"qualityOfLifeIndex": 190.25,
+			"purchasingPowerIndex": 101.17
 		},
 		"FRA": {
 			"country": "France",
-			"qualityOfLifeIndex": 139.31
+			"qualityOfLifeIndex": 139.31,
+			"purchasingPowerIndex": 92.62
 		},	
 		"DEU": {
 			"country": "Germany",
-			"qualityOfLifeIndex": 195.94
+			"qualityOfLifeIndex": 195.94,
+			"purchasingPowerIndex": 111.84
 		},	
 		"GRC": {
 			"country": "Greece",
-			"qualityOfLifeIndex": 94.66
+			"qualityOfLifeIndex": 94.66,
+			"purchasingPowerIndex": 51.89
 		},	
 		"HUN": {
 			"country": "Hungary",
-			"qualityOfLifeIndex": 93.07
+			"qualityOfLifeIndex": 93.07,
+			"purchasingPowerIndex": 46.85
 		},
 		"IRL": {
 			"country": "Ireland",
-			"qualityOfLifeIndex": 148.85
+			"qualityOfLifeIndex": 148.85,
+			"purchasingPowerIndex": 95.72
 		},	
 		"ITA": {
 			"country": "Italy",
-			"qualityOfLifeIndex": 100.99
+			"qualityOfLifeIndex": 100.99,
+			"purchasingPowerIndex": 79.35
 		},	
 		"NLD": {
 			"country": "Netherlands",
-			"qualityOfLifeIndex": 166.76
+			"qualityOfLifeIndex": 166.76,
+			"purchasingPowerIndex": 102.02
 		},	
 		"NOR": {
 			"country": "Norway",
-			"qualityOfLifeIndex": 175.09
+			"qualityOfLifeIndex": 175.09,
+			"purchasingPowerIndex": 96.30
 		},
 		"POL": {
 			"country": "Poland",
-			"qualityOfLifeIndex": 109.74
+			"qualityOfLifeIndex": 109.74,
+			"purchasingPowerIndex": 63.49
 		},	
 		"PRT": {
 			"country": "Portugal",
-			"qualityOfLifeIndex": 129.16
+			"qualityOfLifeIndex": 129.16,
+			"purchasingPowerIndex": 58.22
 		},	
 		"ESP": {
 			"country": "Spain",
-			"qualityOfLifeIndex": 134.91
+			"qualityOfLifeIndex": 134.91,
+			"purchasingPowerIndex": 76.71
 		},	
 		"SWE": {
 			"country": "Sweden",
-			"qualityOfLifeIndex": 193.86
+			"qualityOfLifeIndex": 193.86,
+			"purchasingPowerIndex": 110.95
 		},	
 		"CHE": {
 			"country": "Switzerland",
-			"qualityOfLifeIndex": 222.94
+			"qualityOfLifeIndex": 222.94,
+			"purchasingPowerIndex": 146.51
 		},	
 		"TUR": {
 			"country": "Turkey",
-			"qualityOfLifeIndex": 82.55
+			"qualityOfLifeIndex": 82.55,
+			"purchasingPowerIndex": 53.63
 		},	
 		"GBR": {
 			"country": "United Kingdom",
-			"qualityOfLifeIndex": 156.90
+			"qualityOfLifeIndex": 156.90,
+			"purchasingPowerIndex": 98.12
 		},	
 		"SVN": {
 			"country": "Slovenia",
-			"qualityOfLifeIndex": 134.49
+			"qualityOfLifeIndex": 134.49,
+			"purchasingPowerIndex": 64.16
 		}
 	},
 	"data2016": {
 		"BEL": {
 			"country": "Belgium",
-			"qualityOfLifeIndex": 162.29
+			"qualityOfLifeIndex": 162.29,
+			"purchasingPowerIndex": 106.69
 		},
 		"CZE": {
 			"country": "Czech Republic",
-			"qualityOfLifeIndex": 167.38
+			"qualityOfLifeIndex": 167.38,
+			"purchasingPowerIndex": 89.99
 		},
 		"DNK": {
 			"country": "Denmark",
-			"qualityOfLifeIndex": 206.49
+			"qualityOfLifeIndex": 206.49,
+			"purchasingPowerIndex": 142.14
 		},
 		"FIN": {
 			"country": "Finland",
-			"qualityOfLifeIndex": 184.01
+			"qualityOfLifeIndex": 184.01,
+			"purchasingPowerIndex": 132.93
 		},
 		"FRA": {
 			"country": "France",
-			"qualityOfLifeIndex": 173.56
+			"qualityOfLifeIndex": 173.56,
+			"purchasingPowerIndex": 118.51
 		},	
 		"DEU": {
 			"country": "Germany",
-			"qualityOfLifeIndex": 199.70
+			"qualityOfLifeIndex": 199.70,
+			"purchasingPowerIndex": 147.61
 		},	
 		"GRC": {
 			"country": "Greece",
-			"qualityOfLifeIndex": 165.43
+			"qualityOfLifeIndex": 165.43,
+			"purchasingPowerIndex": 79.27
 		},	
 		"HUN": {
 			"country": "Hungary",
-			"qualityOfLifeIndex": 140.74
+			"qualityOfLifeIndex": 140.74,
+			"purchasingPowerIndex": 56.30
 		},
 		"IRL": {
 			"country": "Ireland",
-			"qualityOfLifeIndex": 171.92
+			"qualityOfLifeIndex": 171.92,
+			"purchasingPowerIndex": 125.66
 		},	
 		"ITA": {
 			"country": "Italy",
-			"qualityOfLifeIndex": 159.28
+			"qualityOfLifeIndex": 159.28,
+			"purchasingPowerIndex": 105.67
 		},	
 		"NLD": {
 			"country": "Netherlands",
-			"qualityOfLifeIndex": 192.40
+			"qualityOfLifeIndex": 192.40,
+			"purchasingPowerIndex": 129.34
 		},	
 		"NOR": {
 			"country": "Norway",
-			"qualityOfLifeIndex": 188.90
+			"qualityOfLifeIndex": 188.90,
+			"purchasingPowerIndex": 125.75
 		},
 		"POL": {
 			"country": "Poland",
-			"qualityOfLifeIndex": 153.61
+			"qualityOfLifeIndex": 153.61,
+			"purchasingPowerIndex": 80.77
 		},	
 		"PRT": {
 			"country": "Portugal",
-			"qualityOfLifeIndex": 181.18
+			"qualityOfLifeIndex": 181.18,
+			"purchasingPowerIndex": 75.47
 		},	
 		"ESP": {
 			"country": "Spain",
-			"qualityOfLifeIndex": 186.41
+			"qualityOfLifeIndex": 186.41,
+			"purchasingPowerIndex": 105.31
 		},	
 		"SWE": {
 			"country": "Sweden",
-			"qualityOfLifeIndex": 185.81
+			"qualityOfLifeIndex": 185.81,
+			"purchasingPowerIndex": 128.22
 		},	
 		"CHE": {
 			"country": "Switzerland",
-			"qualityOfLifeIndex": 208.54
+			"qualityOfLifeIndex": 208.54,
+			"purchasingPowerIndex": 178.74
 		},	
 		"TUR": {
 			"country": "Turkey",
-			"qualityOfLifeIndex": 137.31
+			"qualityOfLifeIndex": 137.31,
+			"purchasingPowerIndex": 64.12
 		},	
 		"GBR": {
 			"country": "United Kingdom",
-			"qualityOfLifeIndex": 180.25
+			"qualityOfLifeIndex": 180.25,
+			"purchasingPowerIndex": 120.00
 		},	
 		"SVN": {
 			"country": "Slovenia",
-			"qualityOfLifeIndex": 175.93
+			"qualityOfLifeIndex": 175.93,
+			"purchasingPowerIndex": 89.76
 		}
 	}
 }
