@@ -1,8 +1,11 @@
 /**
-* Data Processing
-* Marwa Ahmed, Student number 10747141
+* Course: Data Processing 
+* Name: Marwa Ahmed 
+* Student number: 10747141
 * Assignment: D3 Linked views
+* linkedviews.js
 **/
+
 
 /**
 * Data sources:
@@ -30,11 +33,11 @@ window.onload = function() {
 * When all data is loaded, the function convertData (for the bar chart) and makeMap are called,
 * to make the bar chart and the map.
 **/
-function loadData(){
+function loadData() {
 
 	// API request (bli = Better Life Index)
-	var bli2015 ="https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
-	var bli2016 ="https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
+	var bli2015 = "https://stats.oecd.org/SDMX-JSON/data/BLI2015/BEL+CZE+DNK+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR+GBR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
+	var bli2016 = "https://stats.oecd.org/SDMX-JSON/data/BLI2016/BEL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+IRL+ITA+NLD+NOR+POL+PRT+SVN+ESP+SWE+CHE+TUR.JE+JE_EMPL+SC+SC_SNTWS+ES+ES_EDUA+EQ+EQ_WATER+HS+HS_SFRH.L.TOT/all?&dimensionAtObservation=allDimensions";
 
 	// data for bar chart; put data in a queue, so the plot will be made after everything is loaded
 	d3.queue()
@@ -45,7 +48,7 @@ function loadData(){
 	// data for map
 	d3.queue()
 	.defer(d3.json, "QoLI.json")
-	.awaitAll(makeMap)
+	.awaitAll(makeMap);
 };
 
 
@@ -57,7 +60,7 @@ function convertData(error, response, year = 0) {
 	if (error) throw error;
 
 	// convert data to JSON
-	var dataBLI = JSON.parse(response[year].responseText)
+	var dataBLI = JSON.parse(response[year].responseText);
 
 	// number of countries and variables
 	var noCountries = dataBLI.structure.dimensions.observation[0].values.length;
@@ -67,35 +70,34 @@ function convertData(error, response, year = 0) {
 	/**
 	* Iterate through the JSON file to get the names and values of the needed variables 
 	* of each country. Put info of each county into separate 
-	* dictionaries (info), put all dicionaries in a list (infoCountry).
+	* dictionaries (info), put all dicionaries in a list (infoCountry) and put the list in one dictionary (obj).
 	**/
-	var obj ={}
-	
+	var obj = {};
 	var countryName = [];
-	for (var country = 0; country < noCountries; country++){
+	for (var country = 0; country < noCountries; country++) {
 
 		// array of country names
 		countryName[country] = dataBLI.structure.dimensions.observation[0].values[country].name;
 
 		var infoCountry = [];
 		var info = {};
-		for (var variable = 0; variable < noVariables; variable++){
+		for (var variable = 0; variable < noVariables; variable++) {
 
 			// get variables from each country from the JSON 
 			info = (dataBLI.dataSets[0].observations[country + ":" + variable + ":0:0"][0]);
 			infoCountry.push(info);
 		}
-		obj[country] = infoCountry
+		obj[country] = infoCountry;
 	}
 
 	// names of the variables are extracted from the data and put in an array
 	var variableName = [];
-	for (var i = 0; i < noVariables; i++){
+	for (var i = 0; i < noVariables; i++) {
 		variableName[i] = dataBLI.structure.dimensions.observation[1].values[i].name;
 	}
 
 	// all the needed extracted data is passed to the next function to make the bar charts
-	makeBarChart(obj, countryName, variableName)
+	makeBarChart(obj, countryName, variableName);
 };
 
 
@@ -111,14 +113,14 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	// set dimentions and margins of the graph
 	var margin = {top: 50, right: 100, bottom: 100, left: 50};
 	var width = 700 - margin.left - margin.right;
-	var height = 500 - margin.top - margin.bottom/2;
+	var height = 500 - margin.top - margin.bottom / 2;
 
 	// create SVG element
 	var svg = d3.select("#containerBar")
 				.append("svg")
 				.attr("class", "svg")
 				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom/2)
+				.attr("height", height + margin.top + margin.bottom / 2)
 				.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -127,9 +129,9 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						 .domain(variableName)
 						 .rangeBands([margin.left, width]);
 
-	// min and max values of data; domain for yScale
-	var minY = d3.min(obj[country], function(d){ return d; })
-	var maxY = d3.max(obj[country], function(d){ return d; })
+	// min and max values of data; max domain for yScale
+	var minY = d3.min(obj[country], function(d) { return d; });
+	var maxY = d3.max(obj[country], function(d) { return d; });
 
 	// scale-function for the y-axis
 	var yScale = d3.scale.linear()
@@ -156,7 +158,7 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 
 	// title x-axis
 	svg.append("text")
-	   .attr("transform", "translate(" + (width/2) + " ," + height + ")")
+	   .attr("transform", "translate(" + (width / 2) + " ," + height + ")")
 	   .style("text-anchor", "middle")
 	   .style("font-size", "20px")
 	   .text("Indicators");
@@ -175,8 +177,8 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	// text label for the y-axis
 	svg.append("text")
 	   .attr("transform", "rotate(-90)")
-	   .attr("y", 0 - margin.left/2)
-	   .attr("x", 0 - (height/2.5))
+	   .attr("y", 0 - margin.left / 2)
+	   .attr("x", 0 - (height / 2.5))
 	   .attr("dy", "1em")
 	   .style("text-anchor", "middle")
 	   .text("Percentage of the population (%)");
@@ -184,8 +186,8 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	// title graph
 	svg.append("text")
 	   .attr("class", "title")
-	   .attr("y", -margin.top/3)
-	   .attr("x", width/2)
+	   .attr("y", - margin.top / 3)
+	   .attr("x", width / 2)
 	   .style("text-anchor", "middle")
 	   .style("font-size", "30px")
 	   .text("Better Life Index: " + countryName[0]);
@@ -196,67 +198,71 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						.data(obj[country])
 						.enter()
 						.append("rect")
-						.attr("x", function(d,i) {
-							return xScale(variableName[i]) + 0.5;})
-						.attr("y", function (d, i) { return yScale(d) - 1; })
+						.attr("x", function(d, i) {
+							return xScale(variableName[i]) + 0.5; })
+						.attr("y", function(d, i) { 
+							return yScale(d) - 1; })
 						.attr("width", (width / variableName.length) - padding)
-						.attr("height", function (d) {return height - margin.bottom - yScale(d); })
+						.attr("height", function(d) {
+							return height - margin.bottom - yScale(d); })
 						.attr("fill", "green");
 
 
 	/**
 	* This function updates the bar chart when user clicks on a country.
 	**/
-	function updateBarChart(name){
+	function updateBarChart(name) {
 
 		// search for (the number of) the country in the BetterLifeIndex data
 		var country;
-		countryName.forEach(function(d,i){
-			if (d == name){
+		countryName.forEach(function(d, i) {
+			if (d == name) {
 				country = i;
 			};
 		});
 
-		// update bar chart
+		// update bar chart by passing the number of the country in the data
 		var rectangles = svg.selectAll("rect")
 							.data(obj[country])
 							.transition()
 							.duration(500)
-							.attr("x", function(d,i) {
-								return xScale(variableName[i]);})
-							.attr("y", function (d, i) { return yScale(d) - 1; })
+							.attr("x", function(d, i) {
+								return xScale(variableName[i]); })
+							.attr("y", function(d, i) { 
+								return yScale(d) - 1; })
 							.attr("width", (width / variableName.length) - padding)
-							.attr("height", function (d) {return height - margin.bottom - yScale(d); })
+							.attr("height", function(d) {
+								return height - margin.bottom - yScale(d); })
 							.attr("fill", "green");
 
-	// update country name in title graph
-	svg.select(".title")
-	   .transition()
-	   .duration(1000)
-	   .attr("class", "title")
-	   .attr("y", -margin.top/3)
-	   .attr("x", width/2)
-	   .style("text-anchor", "middle")
-	   .style("font-size", "30px")
-	   .text("Better Life Index: " + name);
-	};
+		// update country name in title graph
+		svg.select(".title")
+		   .transition()
+		   .duration(500)
+		   .attr("class", "title")
+		   .attr("y", - margin.top / 3)
+		   .attr("x", width / 2)
+		   .style("text-anchor", "middle")
+		   .style("font-size", "30px")
+		   .text("Better Life Index: " + name);
+		};
 
-	// make a global function of the updateBarChart function
-	update = updateBarChart;
+		// make a global function of the updateBarChart function
+		update = updateBarChart;
 };
 
 
 /**
-* This function makes the map after data is loaded.
+* This function makes the map after the data is loaded.
 **/
-function makeMap(error, data, datasetYear = data[0].data2015){
+function makeMap(error, data, datasetYear = data[0].data2015) {
 	if (error) throw error;
 
 	// iterate over the JSON and put all the qualityOfLifeIndex values in an array
 	var onlyValues = [];
-	Object.keys(datasetYear).forEach(function(key, i){
+	Object.keys(datasetYear).forEach(function(key, i) {
 		onlyValues[i] = datasetYear[key].fillColor = (datasetYear[key].qualityOfLifeIndex);
-	})
+	});
 
 	// get the min and max qualityOfLifeIndex values
 	var minValue = Math.min.apply(null, onlyValues);
@@ -264,13 +270,13 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 
     // make a color scale, to color the map
 	var paletteScale = d3.scale.linear()
-        .domain([minValue,maxValue])
-        .range(["#f8f9c5","#0a8423"]);
+							   .domain([minValue,maxValue])
+							   .range(["#f8f9c5","#0a8423"]);
 
     // color the counties on the map, based on the qualityOfLifeIndex values
-	Object.keys(datasetYear).forEach(function(key){
+	Object.keys(datasetYear).forEach(function(key) {
 		datasetYear[key].fillColor = paletteScale(datasetYear[key].qualityOfLifeIndex);
-	})
+	});
 
 	// make map
 	var map = new Datamap({
@@ -284,7 +290,7 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 	
 		// when user clicks on a country, send name of country to the update function, to update the bar chart
 		done: function(datamap) {
-			datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography){
+			datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
 				update(geography.properties.name);
 			});
 		},
@@ -312,7 +318,7 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 			highlightFillColor: "datasetYear[key].fillColor",
 
 			// show tooltip with name and qualityOfLifeIndex when hovering over country
-			popupTemplate: function(geo, data){
+			popupTemplate: function(geo, data) {
 				return ['<div class="hoverinfo"><strong>',
 				'Country: </strong>'+ geo.properties.name, '</br>' + 
 				'<strong>Quality of Life Index: </strong>', data.qualityOfLifeIndex + '</div>'].join('');
@@ -320,9 +326,8 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 		}
 	});
 
-	// push info to function legend for country colors
+	// push info to the Lgend function
 	Legend(minValue, maxValue)
-
 };
 
 
@@ -336,21 +341,20 @@ function Legend(minValue, maxValue){
 	// set dimentions and margins of the graph
 	var margin = {top: 10, right: 10, bottom: 10, left: 10};
 	var width = 200 - margin.left - margin.right;
-	var height = 50 - margin.top - margin.bottom/2;
-
+	var height = 50 - margin.top - margin.bottom / 2;
 
 	// create SVG element
 	var svg = d3.select("#legend")
 				.append("svg")
 				.attr("class", "svg")
 				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom/2)
+				.attr("height", height + margin.top + margin.bottom / 2)
 				.append("g")
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	// lowest and highest values plus there colors are transformed to a JSON
 	colorLegend = [JSON.parse('{"values":"Low Quality of Life Index", "color":"#f8f9c5"}'), 
-	JSON.parse('{"values":"High Quality of Life Index", "color":"#0a8423"}')]
+				   JSON.parse('{"values":"High Quality of Life Index", "color":"#0a8423"}')];
 
 	// draw legend
 	var legend = svg.selectAll(".legend")
@@ -367,7 +371,7 @@ function Legend(minValue, maxValue){
 		  .attr("y", 0)
 		  .attr("width", 10)
 		  .attr("height", 10)
-		  .style("fill", function(d, i){ 
+		  .style("fill", function(d, i) { 
 				return colorLegend[i].color;
 		  });
 

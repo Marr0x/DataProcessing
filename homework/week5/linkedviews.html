@@ -3,6 +3,7 @@
 -	Name: Marwa Ahmed 
 -	Student number: 10747141
 -	Assignment: D3 Linked views
+-	html file linked views
 -->
 
 <!DOCTYPE html>
@@ -10,14 +11,25 @@
 	<head>
 		<title>D3 - Linked views</title>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-		
-		<!-- style sheet -->
+
+		<!-- css style sheet -->
 		<link rel="stylesheet" type="text/css" href="linkedviews.css">
+
+		<!-- bootstrap, source: https://www.w3schools.com/bootstrap/ -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- needed to keep the legend in place -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+		<!-- needed to get the chart and map next to each other -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 		<!-- load d3v3 and world map -->
 	    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>	
 		<script src="datamaps.world.min.js"></script>
 	    
 		<!-- d3 libraries -->
@@ -27,42 +39,36 @@
 	    <script src="https://d3js.org/d3-request.v1.min.js"></script>
 	    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
 
-		<!-- make button: https://getbootstrap.com/docs/4.0/getting-started/introduction/ -->
+		<!-- make button, source: https://getbootstrap.com/docs/4.0/getting-started/introduction/ -->
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-		<!-- Bootstrap, source: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_default&stacked=h -->
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		
 		<!-- JavaScript file -->
 		<script type="text/javascript" src="linkedviews.js"></script>
 	</head>
 	<body>
-		<!-- project information (course, author, source) -->
+		<!-- project information (title, course, author, source) -->
 		<div class="jumbotron text-center">
-			<h2>Data Processing - D3 Linked views</h2>
+			<h1>Quality of life in Europe</h1>
+			<p><b>Data Processing - D3 Linked views</b></p>
 			<p>Marwa Ahmed (10747141)</p> 
 			<b>Source data: </b>
-			<a href = "https://stats.oecd.org/Index.aspx?DataSetCode=BLI">OECD ilibrary - Better Life Index</a> <a> & </a>
-			<a href = "https://www.numbeo.com/quality-of-life/rankings_by_country.jsp">Quality of Life Index</a>
+				<a href = "https://stats.oecd.org/Index.aspx?DataSetCode=BLI">OECD ilibrary - Better Life Index</a><a> & </a>
+				<a href = "https://www.numbeo.com/quality-of-life/rankings_by_country.jsp">Quality of Life Index</a>
+			</br>
+			</br>
+
+			<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Information</button>
+				<div id="demo" class="collapse">
+					<h2>Where in Europe is life most pleasant?</h2>
+					The quality of life in Europe differs per countries. The <a href = "https://www.numbeo.com/cost-of-living/">NUMBEO</a> database provides data about health care, pollution, cost of living etc. from countries worldwide. In the map below countries are colored based on the Quality of Life Index (QoLI) of NUMBEO. For the coloring, a range from yellow (low QoLI) to green (high QoLI) is used. The aim of this 'mini-research' was to determine whether we would see the same trend in quality of life in other databases for these countries. The <a href="http://www.oecd.org/">OECD</a> (Organisation for Economic Co-operation and Development) is an organisation which also provides data about health, economics, social and environmental factors. From the Better Life Index of the OECD database five indicators were selected, namely: 'Employment rate', 'Quality of support network', 'Educational attainment', 'Water quality' and 'Self-reported health'. By clicking on a country on the map, a bar chart will appear which shows how well that country scores for each of the five indicators. Both datasets show the same trend. Countries which have a high Quality of Life Index also have a higher percentage of employment rate, quality of support network, educational attainment, self-reported health and a better water quality.
+				</div>
 		</div>
 
-			<!-- button to choose year-->
-<!--  		<div class="dropdown show" style="position: relative; margin: auto">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position: relative; margin: auto">Choose Year</a>
-
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" onclick="update('data[0].data2015')">2015</a>
-				<a class="dropdown-item" onclick="update('data[0].data2016')">2016</a>
-		</div> -->
-
  		<!-- div for map -->
-	 	<div class="col-sm-6">
-			<div id="containerMap" style="position: relative; width: 700px; height: 500px; margin: auto;"></div>	
+	 	<div class="col-lg-6">
+			<div id="containerMap" style="position: relative; width: 700px; height: 500px;"></div>	
 			<div id="legend">
 				<div class="legend-title">Legend</div>
 			</div>
@@ -70,9 +76,9 @@
 		</div>
 
 		<!-- div for bar chart -->
-	 	<div class="col-sm-6">
-			<div id="containerBar" style="position: relative; width: 700px; height: 500px; margin: auto;"></div>
+	 	<div class="col-lg-6">
+			<div id="containerBar" style="position: relative; width: 700px; height: 500px;"></div>
 		</div>
-	</br>
+		</br>
 	</body>
 </html>
