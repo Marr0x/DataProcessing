@@ -113,7 +113,6 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	var width = 700 - margin.left - margin.right;
 	var height = 500 - margin.top - margin.bottom/2;
 
-
 	// create SVG element
 	var svg = d3.select("#containerBar")
 				.append("svg")
@@ -240,7 +239,6 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	   .style("text-anchor", "middle")
 	   .style("font-size", "30px")
 	   .text("Better Life Index: " + name);
-
 	};
 
 	// make a global function of the updateBarChart function
@@ -254,13 +252,10 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 function makeMap(error, data, datasetYear = data[0].data2015){
 	if (error) throw error;
 
-	console.log(data[0])
-
 	// iterate over the JSON and put all the qualityOfLifeIndex values in an array
 	var onlyValues = [];
 	Object.keys(datasetYear).forEach(function(key, i){
 		onlyValues[i] = datasetYear[key].fillColor = (datasetYear[key].qualityOfLifeIndex);
-
 	})
 
 	// get the min and max qualityOfLifeIndex values
@@ -325,23 +320,39 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 		}
 	});
 
+	// push info to function legend for country colors
+	Legend(minValue, maxValue)
 
-	// make a legend for the colors on the map
-
-	// var legend_params = {
-	//   legendTitle: "Legenda",
-	// };
-	// map.legend(legend_params);
-
-	values = [minValue, maxValue]
-	colors = ["#f8f9c5","#0a8423"]
+};
 
 
-	colorLegend = [JSON.parse('{"values":"low Quality of Life Index", "color":"#f8f9c5"}'), 
-	JSON.parse('{"values":"high Quality of Life Index", "color":"#0a8423"}')]
+/**
+* This function makes a svg to put a legend in it for the colors on the map. 
+* The colors on the map follow a gradient. For the legend only the lowest color and highest 
+* color are selected.
+**/
+function Legend(minValue, maxValue){
+
+	// set dimentions and margins of the graph
+	var margin = {top: 10, right: 10, bottom: 10, left: 10};
+	var width = 200 - margin.left - margin.right;
+	var height = 50 - margin.top - margin.bottom/2;
+
+
+	// create SVG element
+	var svg = d3.select("#legend")
+				.append("svg")
+				.attr("class", "svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom/2)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	// lowest and highest values plus there colors are transformed to a JSON
+	colorLegend = [JSON.parse('{"values":"Low Quality of Life Index", "color":"#f8f9c5"}'), 
+	JSON.parse('{"values":"High Quality of Life Index", "color":"#0a8423"}')]
 
 	// draw legend
-	var svg = d3.select("#legend")
 	var legend = svg.selectAll(".legend")
 					.data(colorLegend)
 					.enter().append("g")
@@ -350,10 +361,10 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 						return "translate(0," + i * 15 + ")"; 
 					});
 
-	// draw legend colored rectangles
+	// draw legend rectangles
 	legend.append("rect")
-		  .attr("x", 15)
-		  .attr("y", 15)
+		  .attr("x", 0)
+		  .attr("y", 0)
 		  .attr("width", 10)
 		  .attr("height", 10)
 		  .style("fill", function(d, i){ 
@@ -362,10 +373,10 @@ function makeMap(error, data, datasetYear = data[0].data2015){
 
 	// draw legend text
 	legend.append("text")
-		  .attr("x", 15)
+		  .attr("x", 20)
 		  // text 5px lower the position of rect
 		  .attr("y", 5)
-		  .attr("dy", ".400em")
+		  .attr("dy", ".40em")
 		  .style("text-anchor", "begin")
 		  .text(function(d, i) { 
 		  		return colorLegend[i].values;
