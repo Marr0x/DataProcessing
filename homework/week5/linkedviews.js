@@ -283,7 +283,7 @@ function makeMap(error, data, datasetYear = data[0].data2015) {
 		element: document.getElementById('containerMap'),
 		// countries which are not in the dataset will be colored gray
 		fills: {
-			defaultFill: 'rgba(0,0,0,0.1)'
+			defaultFill: '#d2d2d2'
 		},
 		scope: 'world',
 		data: datasetYear,
@@ -341,7 +341,7 @@ function Legend(minValue, maxValue){
 	// set dimentions and margins of the graph
 	var margin = {top: 10, right: 10, bottom: 10, left: 10};
 	var width = 200 - margin.left - margin.right;
-	var height = 50 - margin.top - margin.bottom / 2;
+	var height = 60 - margin.top - margin.bottom / 2;
 
 	// create SVG element
 	var svg = d3.select("#legend")
@@ -354,7 +354,8 @@ function Legend(minValue, maxValue){
 
 	// lowest and highest values plus there colors are transformed to a JSON
 	colorLegend = [JSON.parse('{"values":"Low Quality of Life Index", "color":"#f8f9c5"}'), 
-				   JSON.parse('{"values":"High Quality of Life Index", "color":"#0a8423"}')];
+				   JSON.parse('{"values":"High Quality of Life Index", "color":"#0a8423"}'),
+				   JSON.parse('{"values":"Missing data", "color":"#d2d2d2"}')];
 
 	// draw legend
 	var legend = svg.selectAll(".legend")
