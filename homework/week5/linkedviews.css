@@ -26,6 +26,20 @@
 	shape-rendering: crispEdges;
 }
 
+/* style tooltip bar chart */
+.toolTip {	
+    position: absolute;			
+    text-align: center;			
+    width: auto;					
+    height: auto;					
+    padding: 4px;				
+    font: 12px sans-serif bold;		
+    background: lightCyan;	
+    border: 1px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+
 /* position of legend for the colors of the countries on map */
 #legend {
       position: absolute;

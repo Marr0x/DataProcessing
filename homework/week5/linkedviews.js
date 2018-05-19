@@ -192,6 +192,12 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 	   .style("font-size", "30px")
 	   .text("Better Life Index: " + countryName[0]);
 
+	// make a tooltip for bar chart
+	var tooltip = d3.select("body")
+					.append("div")
+					.attr("class", "toolTip")
+					.style("position", "absolute");
+
 	// make bars 
 	var padding = 20;
 	var rectangles = svg.selectAll("rect")
@@ -205,7 +211,19 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						.attr("width", (width / variableName.length) - padding)
 						.attr("height", function(d) {
 							return height - margin.bottom - yScale(d); })
-						.attr("fill", "green");
+						.attr("fill", "green")
+
+						// when hovering over the datapoints show % value
+						.on("mousemove", function(d, i) {
+					            return tooltip
+					              .style("left", d3.event.pageX - 20 + "px")
+					              .style("top", d3.event.pageY - 30 + "px")
+					              .style("display", "inline")
+					              .html((d3.format(".1f")(d)) + "%");
+					        })
+						.on("mouseout", function(d){ 
+							tooltip.style("display", "none");
+						});
 
 
 	/**
