@@ -199,9 +199,9 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 						.enter()
 						.append("rect")
 						.attr("x", function(d, i) {
-							return xScale(variableName[i]) + 0.5; })
+							return xScale(variableName[i]) + 0.2; })
 						.attr("y", function(d, i) { 
-							return yScale(d) - 1; })
+							return yScale(d) - 0.5; })
 						.attr("width", (width / variableName.length) - padding)
 						.attr("height", function(d) {
 							return height - margin.bottom - yScale(d); })
@@ -227,9 +227,9 @@ function makeBarChart(obj, countryName, variableName, year = 0, country = 0) {
 							.transition()
 							.duration(500)
 							.attr("x", function(d, i) {
-								return xScale(variableName[i]); })
+								return xScale(variableName[i]) + 0.2; })
 							.attr("y", function(d, i) { 
-								return yScale(d) - 1; })
+								return yScale(d) - 0.5; })
 							.attr("width", (width / variableName.length) - padding)
 							.attr("height", function(d) {
 								return height - margin.bottom - yScale(d); })
@@ -298,7 +298,7 @@ function makeMap(error, data, datasetYear = data[0].data2015) {
 		// zoom in on Europe
 		setProjection: function(element) {
 			var projection = d3.geo.equirectangular()
-								   .center([13, 53])
+								   .center([13, 52])
 								   .rotate([4.4, 0])
 								   .scale(600)
 								   .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
@@ -326,7 +326,7 @@ function makeMap(error, data, datasetYear = data[0].data2015) {
 		}
 	});
 
-	// push info to the Lgend function
+	// push info to the Legend function
 	Legend(minValue, maxValue)
 };
 
