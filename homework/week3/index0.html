@@ -92,7 +92,7 @@
 
 				// scale-function for the x-axis
 				var xScale = d3.scale.ordinal()
-					 .domain(dataset.data.map(function(d){return d.province;}))
+					 .domain([0, dataset.data.length])
 					 .range([margin.left, svgWidth - margin.right]);
 
 				// min and max value from data (y-axis)
@@ -102,7 +102,7 @@
 				// scale-function for y-axis
 				var yScale = d3.scale.linear()
 									.domain([0, maxData])
-									.range([yRange, margin.top]);
+									.range([margin.top, yRange]);
 
 				// create svg element
 				var svg = d3.select("body")
@@ -114,7 +114,7 @@
 				// make a tooltip, source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7
 				var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 				var g = svg.append("g")
-    	   				   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		   				   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 				// draw the rectangles using the data
 				var rectangles = svg.selectAll("rect")
@@ -129,7 +129,7 @@
 									
 									// top bar = height minus data value
 									.attr("y", function(d){
-										return yScale(d.NoStudents);
+										return svgHeight - margin.top - yScale(d.NoStudents);
 									})
 									
 									// dynamic bar width
@@ -151,7 +151,7 @@
 							              .style("display", "inline-block")
 							              .html((d.province) + "<br>" + "Number of students:" + (d.NoStudents));
 							        })
-    								.on("mouseout", function(d){ tooltip.style("display", "none");});
+									.on("mouseout", function(d){ tooltip.style("display", "none");});
 
 									// show actual data values by adding labels
 									svg.selectAll("text")
